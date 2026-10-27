@@ -93,7 +93,7 @@ messages:
     - "<#ff7ab8>/applesub reload</#ff7ab8> <dark_gray>—</dark_gray> <gray>перезагрузить конфиг"
     - "<dark_gray>Срок: 30d, 12h, 1d12h, 1w, 1mo, forever"
   only-players: "<#ff6b81>Эта команда доступна только игрокам."
-  no-subscription: "<#ff6b81>У вас нет подписки AppleSub.</#ff6b81> <gray>Оформите её, чтобы открыть меню <#ff7ab8>/sub</#ff7ab8>."
+  feature-locked: "<#ff6b81>Эта функция доступна только с подпиской AppleSub."
   data-loading: "<gray>Ваши данные ещё загружаются, попробуйте через секунду."
   database-error: "<#ff6b81>Ошибка базы данных — подробности в консоли."
   invalid-duration: "<#ff6b81>Неверный срок: <white><input></white>.</#ff6b81> <gray>Примеры: <#ff7ab8>30d</#ff7ab8>, <#ff7ab8>12h</#ff7ab8>, <#ff7ab8>1d12h</#ff7ab8>, <#ff7ab8>forever</#ff7ab8>."
@@ -124,14 +124,59 @@ messages:
   armor-broken-subtitle: "<gray><slot> <dark_gray>• <#ff7ab8>почините или замените"
 
 menu:
+  # ── Декоративные стёкла ──
+  # Каждому символу сопоставляется предмет, а раскладки ниже (main.layout, trash.bottom-row)
+  # расставляют эти символы по слотам. Подходит любой предмет, не только стекло.
+  # Ключ — ровно один символ, кроме пробела и точки.
+  # Короткая форма:  A: RED_STAINED_GLASS_PANE
+  # Полная форма:
+  #   C:
+  #     material: BLACK_STAINED_GLASS_PANE
+  #     name: "<#ff7ab8>AppleSub"   # без name подсказка при наведении скрыта
+  #     lore: ["<gray>текст"]
+  #     glow: true
+  panes:
+    A: RED_STAINED_GLASS_PANE
+    B: PINK_STAINED_GLASS_PANE
   state-on: "<#ff7ab8>✔ Включено"
   state-off: "<gray>✘ Выключено"
+  state-locked: "<#ff2e4d>✘ Нужна подписка"
   status-on-material: PINK_DYE
   status-off-material: GRAY_DYE
+  status-locked-material: RED_DYE
+  # Иконка функции у игрока без подписки (название и описание остаются)
+  locked-material: BARRIER
   status-lore:
     - "<dark_gray>Нажмите, чтобы переключить"
+  status-locked-lore:
+    - "<dark_gray>Оформите подписку AppleSub"
+  # Шаблон описания функций в главном меню. Строки <description>, <extra> и <hints>
+  # заменяются одноимёнными списками из menu.main.features.<функция>.
+  feature-lore:
+    unlocked:
+      - ""
+      - "<description>"
+      - ""
+      - "<gray>Статус: <state>"
+      - "<extra>"
+      - ""
+      - "<hints>"
+    locked:
+      - ""
+      - "<description>"
+      - ""
+      - "<#ff2e4d>✘ Доступно только с подпиской"
+      - "<dark_gray>Оформите AppleSub, чтобы включить"
   main:
     title: "<gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> <dark_gray>• подписка"
+    # 5 строк по 9 символов из menu.panes; пробел или точка — пустой слот.
+    # Голова, функции, статусы и «Закрыть» ставятся поверх стёкол.
+    layout:
+      - "ABABABABA"
+      - "B.......B"
+      - "A.......A"
+      - "B.......B"
+      - "ABABABABA"
     info:
       name: "<gradient:#ff2e4d:#ff7ab8><bold><player></bold></gradient>"
       lore:
@@ -142,61 +187,58 @@ menu:
         - ""
         - "<dark_gray>Нажимайте на функции ниже,"
         - "<dark_gray>чтобы включать и выключать их."
+      lore-locked:
+        - ""
+        - "<gray>Подписка: <#ff2e4d>не активна"
+        - ""
+        - "<dark_gray>Функции ниже доступны"
+        - "<dark_gray>только с подпиской AppleSub."
     close:
       name: "<#ff2e4d>✘ Закрыть"
     features:
       night-vision:
         material: ENDER_EYE
         name: "<gradient:#ff2e4d:#ff7ab8><bold>Ночное зрение</bold></gradient>"
-        lore:
-          - ""
+        description:
           - "<gray>Вечное ночное зрение — не"
           - "<gray>заканчивается и возвращается"
           - "<gray>после смерти и молока."
-          - ""
-          - "<gray>Статус: <state>"
-          - ""
+        hints:
           - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
       anti-fire:
         material: BLAZE_POWDER
         name: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-огонь</bold></gradient>"
-        lore:
-          - ""
+        description:
           - "<gray>Скрывает огонь на вашем экране,"
           - "<gray>когда вы горите. Урон от огня"
           - "<gray>при этом не отключается."
-          - ""
-          - "<gray>Статус: <state>"
-          - ""
+        hints:
           - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
       anti-trash:
         material: HOPPER
         name: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-мусор</bold></gradient>"
-        lore:
-          - ""
+        description:
           - "<gray>Вы не подбираете мусорные"
           - "<gray>предметы. Можно добавить свои"
           - "<gray>предметы к стандартному списку."
-          - ""
-          - "<gray>Статус: <state>"
+        extra:
           - "<gray>Своих предметов: <white><count>/<max>"
-          - ""
+        hints:
           - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
           - "<#ff7ab8>ПКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>настроить список"
       armor-notify:
         material: ANVIL
         name: "<gradient:#ff2e4d:#ff7ab8><bold>Уведомления о броне</bold></gradient>"
-        lore:
-          - ""
+        description:
           - "<gray>Предупреждает со звуком наковальни,"
           - "<gray>когда броня почти сломана"
           - "<gray>и её пора чинить."
-          - ""
-          - "<gray>Статус: <state>"
-          - ""
+        hints:
           - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
   trash:
     title: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-мусор</bold></gradient> <dark_gray>• список"
+    # Нижняя строка меню: 9 символов из menu.panes. Кнопки ставятся поверх.
+    bottom-row: "BABABABAB"
     default-entry-lore:
       - ""
       - "<gray>Стандартный мусор"

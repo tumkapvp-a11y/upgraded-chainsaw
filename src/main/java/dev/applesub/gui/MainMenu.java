@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Map;
 
+/** Open to every player; without a subscription the features are shown locked. */
 public final class MainMenu extends Menu {
 
     private static final int INFO_SLOT = 13;
@@ -34,7 +35,7 @@ public final class MainMenu extends Menu {
             Feature.ARMOR_NOTIFY, Material.ANVIL);
 
     public MainMenu(AppleSubPlugin plugin, Player viewer) {
-        super(plugin, viewer, 5, plugin.settings().menuText("main.title"));
+        super(plugin, viewer, Settings.MAIN_ROWS, plugin.settings().menuText("main.title"));
     }
 
     @Override
@@ -43,14 +44,15 @@ public final class MainMenu extends Menu {
         Settings settings = plugin.settings();
         PlayerData data = plugin.dataManager().get(viewer.getUniqueId());
         inventory.clear();
-        frame();
+        applyLayout(settings.mainLayout(), 0);
         if (data == null) {
             return;
         }
+        boolean unlocked = data.hasSubscription();
 
         ItemStack info = Items.create(Material.PLAYER_HEAD,
                 settings.menuText("main.info.name", Placeholder.unparsed("player", viewer.getName())),
-                settings.menuLore("main.info.lore",
+                settings.menuLore(unlocked ? "main.info.lore" : "main.info.lore-locked",
                         Placeholder.unparsed("player", viewer.getName()),
                         Placeholder.unparsed("time", settings.formatRemaining(data.expiresAt())),
                         Placeholder.unparsed("date", settings.formatDate(data.expiresAt()))));
@@ -69,18 +71,33 @@ public final class MainMenu extends Menu {
                     Placeholder.unparsed("count", String.valueOf(data.customTrash().size())),
                     Placeholder.unparsed("max", String.valueOf(settings.maxCustomTrash()))
             };
-            ItemStack icon = Items.create(settings.menuMaterial(path + ".material", DEFAULT_ICONS.get(feature)),
-                    settings.menuText(path + ".name", placeholders), settings.menuLore(path + ".lore", placeholders));
+            Material iconMaterial = unlocked
+                    ? settings.menuMaterial(path + ".material", DEFAULT_ICONS.get(feature))
+                    : settings.menuMaterial("locked-material", Material.BARRIER);
+            ItemStack icon = Items.create(iconMaterial, settings.menuText(path + ".name", placeholders),
+                    settings.featureLore(feature, unlocked, placeholders));
             int slot = ICON_SLOTS.get(feature);
-            inventory.setItem(slot, Items.glow(icon, enabled));
+            inventory.setItem(slot, Items.glow(icon, unlocked && enabled));
 
-            Material statusMaterial = enabled
-                    ? settings.menuMaterial("status-on-material", Material.PINK_DYE)
-                    : settings.menuMaterial("status-off-material", Material.GRAY_DYE);
-            inventory.setItem(slot + 9, Items.create(statusMaterial, settings.state(enabled), settings.menuLore("status-lore")));
+            ItemStack status;
+            if (!unlocked) {
+                status = Items.create(settings.menuMaterial("status-locked-material", Material.RED_DYE),
+                        settings.menuText("state-locked"), settings.menuLore("status-locked-lore"));
+            } else {
+                Material statusMaterial = enabled
+                        ? settings.menuMaterial("status-on-material", Material.PINK_DYE)
+                        : settings.menuMaterial("status-off-material", Material.GRAY_DYE);
+                status = Items.create(statusMaterial, settings.state(enabled), settings.menuLore("status-lore"));
+            }
+            inventory.setItem(slot + 9, status);
         }
 
         inventory.setItem(CLOSE_SLOT, Items.create(Material.BARRIER, settings.menuText("main.close.name"), null));
+    }
+
+    @Override
+    protected void onLocked() {
+        render();
     }
 
     @Override

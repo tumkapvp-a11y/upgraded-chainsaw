@@ -43,9 +43,7 @@ public final class TrashMenu extends Menu {
         Settings settings = plugin.settings();
         PlayerData data = plugin.dataManager().get(viewer.getUniqueId());
         inventory.clear();
-        for (int slot = PAGE_SIZE; slot < PAGE_SIZE + 9; slot++) {
-            inventory.setItem(slot, pane(5, slot % 9));
-        }
+        applyLayout(settings.trashBar(), PAGE_SIZE);
         if (data == null) {
             return;
         }

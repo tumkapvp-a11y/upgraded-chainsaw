@@ -67,6 +67,7 @@ public final class SubscriptionService {
                 if (cached != null && cached.isActive(Feature.NIGHT_VISION)) {
                     NightVision.ensure(online);
                 }
+                refreshMenu(online, false);
             }
         })));
     }
@@ -168,11 +169,6 @@ public final class SubscriptionService {
             settings().send(player, "data-loading");
             return;
         }
-        if (!data.hasSubscription()) {
-            settings().send(player, "no-subscription");
-            settings().sound(player, "error");
-            return;
-        }
         new MainMenu(plugin, player).open();
     }
 
@@ -218,12 +214,22 @@ public final class SubscriptionService {
         if (nightVision) {
             NightVision.remove(player);
         }
-        if (player.getOpenInventory().getTopInventory().getHolder(false) instanceof Menu) {
-            player.closeInventory();
-        }
+        refreshMenu(player, true);
         if (messageKey != null) {
             settings().send(player, messageKey);
             settings().sound(player, "error");
+        }
+    }
+
+    /** Redraws an open menu; after losing the subscription, sub-menus fall back to the locked main menu. */
+    private void refreshMenu(Player player, boolean lost) {
+        if (!(player.getOpenInventory().getTopInventory().getHolder(false) instanceof Menu menu)) {
+            return;
+        }
+        if (lost && !(menu instanceof MainMenu)) {
+            new MainMenu(plugin, player).open();
+        } else {
+            menu.refresh();
         }
     }
 }

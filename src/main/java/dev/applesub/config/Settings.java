@@ -12,10 +12,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Material;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -26,6 +28,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,6 +41,8 @@ public final class Settings {
 
     private static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy HH:mm";
     private static final long DEFAULT_DURATION = TimeUnit.DAYS.toMillis(30);
+    private static final Set<String> FEATURE_LORE_LISTS = Set.of("description", "extra", "hints");
+    public static final int MAIN_ROWS = 5;
 
     private final AppleSubPlugin plugin;
     private final MiniMessage mini = MiniMessage.miniMessage();
@@ -58,6 +63,9 @@ public final class Settings {
     private boolean armorTitle;
     private final Map<EquipmentSlot, String> slotNames = new EnumMap<>(EquipmentSlot.class);
     private final Map<String, Sound> sounds = new HashMap<>();
+    private final Map<Character, ItemStack> panes = new HashMap<>();
+    private ItemStack[] mainLayout = new ItemStack[MAIN_ROWS * 9];
+    private ItemStack[] trashBar = new ItemStack[9];
 
     public Settings(AppleSubPlugin plugin) {
         this.plugin = plugin;
@@ -67,6 +75,9 @@ public final class Settings {
         plugin.reloadConfig();
         config = plugin.getConfig();
         Logger log = plugin.getLogger();
+        if (addMissingDefaults()) {
+            log.info("В config.yml добавлены новые параметры");
+        }
 
         prefix = mini.deserialize(config.getString("messages.prefix", ""));
 
@@ -119,6 +130,93 @@ public final class Settings {
                 }
             }
         }
+
+        panes.clear();
+        ConfigurationSection paneSection = config.getConfigurationSection("menu.panes");
+        if (paneSection != null) {
+            for (String key : paneSection.getKeys(false)) {
+                if (key.length() != 1 || key.equals(" ") || key.equals(".")) {
+                    log.warning("menu.panes: ключ должен быть одним символом (кроме пробела и точки): " + key);
+                    continue;
+                }
+                ItemStack pane = parsePane(paneSection, key);
+                if (pane != null) {
+                    panes.put(key.charAt(0), pane);
+                }
+            }
+        }
+        mainLayout = parseLayout("menu.main.layout", config.getStringList("menu.main.layout"), MAIN_ROWS);
+        trashBar = parseLayout("menu.trash.bottom-row", List.of(config.getString("menu.trash.bottom-row", "")), 1);
+    }
+
+    /** Writes keys added in newer plugin versions into an existing config.yml so they can be edited. */
+    private boolean addMissingDefaults() {
+        Configuration defaults = config.getDefaults();
+        if (defaults == null || defaults.getKeys(true).stream().allMatch(config::isSet)) {
+            return false;
+        }
+        config.options().copyDefaults(true);
+        plugin.saveConfig();
+        plugin.reloadConfig();
+        config = plugin.getConfig();
+        return true;
+    }
+
+    private ItemStack parsePane(ConfigurationSection parent, String key) {
+        ConfigurationSection section = parent.getConfigurationSection(key);
+        String materialName = section != null ? section.getString("material", "") : parent.getString(key, "");
+        Material material = Material.matchMaterial(materialName);
+        if (material == null || material.isAir() || !material.isItem()) {
+            plugin.getLogger().warning("menu.panes." + key + ": неизвестный предмет " + materialName);
+            return null;
+        }
+        if (section == null) {
+            return Items.pane(material);
+        }
+        String name = section.getString("name", "");
+        ItemStack item;
+        if (name.isEmpty()) {
+            item = Items.pane(material);
+        } else {
+            List<Component> lore = new ArrayList<>();
+            for (String line : section.getStringList("lore")) {
+                lore.add(Items.noItalic(mini.deserialize(line)));
+            }
+            item = Items.create(material, Items.noItalic(mini.deserialize(name)), lore);
+        }
+        return Items.glow(item, section.getBoolean("glow", false));
+    }
+
+    /** Rows of 9 symbols from menu.panes; a space or a dot leaves the slot empty. */
+    private ItemStack[] parseLayout(String path, List<String> lines, int rows) {
+        Logger log = plugin.getLogger();
+        ItemStack[] layout = new ItemStack[rows * 9];
+        if (lines.size() > rows) {
+            log.warning(path + ": лишние строки пропущены, максимум " + rows);
+        }
+        Set<Character> unknown = new LinkedHashSet<>();
+        for (int row = 0; row < Math.min(rows, lines.size()); row++) {
+            String line = lines.get(row);
+            if (!line.isEmpty() && line.length() != 9) {
+                log.warning(path + ": строка " + (row + 1) + " должна состоять из 9 символов: \"" + line + "\"");
+            }
+            for (int column = 0; column < Math.min(9, line.length()); column++) {
+                char symbol = line.charAt(column);
+                if (symbol == ' ' || symbol == '.') {
+                    continue;
+                }
+                ItemStack pane = panes.get(symbol);
+                if (pane == null) {
+                    unknown.add(symbol);
+                } else {
+                    layout[row * 9 + column] = pane;
+                }
+            }
+        }
+        if (!unknown.isEmpty()) {
+            log.warning(path + ": символы не описаны в menu.panes: " + unknown);
+        }
+        return layout;
     }
 
     private Sound parseSound(String name, ConfigurationSection section) {
@@ -210,6 +308,33 @@ public final class Settings {
 
     public Component featureName(Feature feature) {
         return menuText("main.features." + feature.key() + ".name");
+    }
+
+    /**
+     * Feature lore built from the menu.feature-lore template: the lines "&lt;description&gt;",
+     * "&lt;extra&gt;" and "&lt;hints&gt;" expand to the feature's own lists.
+     */
+    public List<Component> featureLore(Feature feature, boolean unlocked, TagResolver... resolvers) {
+        List<Component> lore = new ArrayList<>();
+        for (String line : config.getStringList("menu.feature-lore." + (unlocked ? "unlocked" : "locked"))) {
+            String trimmed = line.trim();
+            String list = trimmed.length() > 2 && trimmed.startsWith("<") && trimmed.endsWith(">")
+                    ? trimmed.substring(1, trimmed.length() - 1) : null;
+            if (list != null && FEATURE_LORE_LISTS.contains(list)) {
+                lore.addAll(menuLore("main.features." + feature.key() + "." + list, resolvers));
+            } else {
+                lore.add(Items.noItalic(mini.deserialize(line, resolvers)));
+            }
+        }
+        return lore;
+    }
+
+    public ItemStack[] mainLayout() {
+        return mainLayout;
+    }
+
+    public ItemStack[] trashBar() {
+        return trashBar;
     }
 
     // ---- time ----
