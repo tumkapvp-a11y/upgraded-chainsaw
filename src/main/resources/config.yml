@@ -1,0 +1,230 @@
+# ╔══════════════════════════════════════════════╗
+# ║               AppleSub • config               ║
+# ╚══════════════════════════════════════════════╝
+# Все тексты поддерживают MiniMessage: https://docs.advntr.dev/minimessage/format
+# Палитра: красный #ff2e4d → розовый #ff7ab8
+
+storage:
+  # sqlite — локальный файл в папке плагина, mysql — MySQL / MariaDB
+  # Смена типа хранилища применяется только после перезапуска сервера.
+  type: sqlite
+  table-prefix: "applesub_"
+  sqlite:
+    file: "database.db"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "minecraft"
+    username: "root"
+    password: ""
+    use-ssl: false
+    pool-size: 5
+
+subscription:
+  # Срок для "/applesub give <ник>" без указания времени.
+  # Формат: 30d, 12h, 1d12h, 1w, 1mo, forever
+  default-duration: "30d"
+  date-format: "dd.MM.yyyy HH:mm"
+
+# Состояние функций у игрока при первой выдаче подписки
+defaults:
+  night-vision: true
+  anti-fire: true
+  anti-trash: false
+  armor-notify: true
+
+anti-trash:
+  # Сколько своих предметов игрок может добавить к стандартному списку
+  max-custom-items: 45
+  # Стандартный мусор (названия из https://jd.papermc.io/paper/1.21.11/org/bukkit/Material.html)
+  default-items:
+    - ROTTEN_FLESH
+    - POISONOUS_POTATO
+    - SPIDER_EYE
+    - WHEAT_SEEDS
+    - DEAD_BUSH
+    - COBBLESTONE
+    - COBBLED_DEEPSLATE
+    - DIRT
+    - GRAVEL
+    - NETHERRACK
+    - GRANITE
+    - DIORITE
+    - ANDESITE
+    - TUFF
+
+armor-notify:
+  # Предупреждать, когда прочность брони падает до этого процента и ниже
+  threshold-percent: 15
+  # Пауза между повторными предупреждениями для одного слота (секунды)
+  cooldown-seconds: 60
+  # Показывать титр по центру экрана
+  title: true
+  slot-names:
+    HEAD: "Шлем"
+    CHEST: "Нагрудник"
+    LEGS: "Поножи"
+    FEET: "Ботинки"
+
+# key — ключ звука Minecraft (https://minecraft.wiki/w/Sounds.json), пустой key отключает звук
+sounds:
+  armor-low: { key: "block.anvil.land", volume: 0.8, pitch: 1.0 }
+  armor-broken: { key: "block.anvil.destroy", volume: 1.0, pitch: 1.0 }
+  menu-click: { key: "ui.button.click", volume: 0.6, pitch: 1.2 }
+  toggle-on: { key: "block.note_block.pling", volume: 0.7, pitch: 1.6 }
+  toggle-off: { key: "block.note_block.bass", volume: 0.7, pitch: 0.8 }
+  error: { key: "entity.villager.no", volume: 0.7, pitch: 1.0 }
+  received: { key: "entity.player.levelup", volume: 0.8, pitch: 1.2 }
+
+time:
+  forever: "навсегда"
+  day: "д"
+  hour: "ч"
+  minute: "м"
+  second: "с"
+
+messages:
+  prefix: "<gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> <dark_gray>»</dark_gray> "
+  help:
+    - "<gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> <dark_gray>• <gray>команды"
+    - "<#ff7ab8>/applesub give <ник> [срок]</#ff7ab8> <dark_gray>—</dark_gray> <gray>выдать или продлить подписку"
+    - "<#ff7ab8>/applesub take <ник></#ff7ab8> <dark_gray>—</dark_gray> <gray>забрать подписку"
+    - "<#ff7ab8>/applesub check <ник></#ff7ab8> <dark_gray>—</dark_gray> <gray>проверить подписку"
+    - "<#ff7ab8>/applesub reload</#ff7ab8> <dark_gray>—</dark_gray> <gray>перезагрузить конфиг"
+    - "<dark_gray>Срок: 30d, 12h, 1d12h, 1w, 1mo, forever"
+  only-players: "<#ff6b81>Эта команда доступна только игрокам."
+  no-subscription: "<#ff6b81>У вас нет подписки AppleSub.</#ff6b81> <gray>Оформите её, чтобы открыть меню <#ff7ab8>/sub</#ff7ab8>."
+  data-loading: "<gray>Ваши данные ещё загружаются, попробуйте через секунду."
+  database-error: "<#ff6b81>Ошибка базы данных — подробности в консоли."
+  invalid-duration: "<#ff6b81>Неверный срок: <white><input></white>.</#ff6b81> <gray>Примеры: <#ff7ab8>30d</#ff7ab8>, <#ff7ab8>12h</#ff7ab8>, <#ff7ab8>1d12h</#ff7ab8>, <#ff7ab8>forever</#ff7ab8>."
+  player-not-found: "<#ff6b81>Игрок <white><player></white> не найден."
+  give-success: "<gray>Игрок <#ff7ab8><player></#ff7ab8> получил подписку на <white><duration></white>. Осталось: <white><time></white> <dark_gray>(до <date>)</dark_gray>"
+  subscription-received: "<gray>Вам выдана подписка <gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> на <white><duration></white>! Откройте меню: <click:run_command:'/sub'><hover:show_text:'<gray>Нажмите, чтобы открыть'><#ff7ab8><u>/sub</u></#ff7ab8></hover></click>"
+  take-success: "<gray>Подписка игрока <#ff7ab8><player></#ff7ab8> отозвана."
+  take-not-active: "<gray>У игрока <#ff7ab8><player></#ff7ab8> нет активной подписки."
+  subscription-taken: "<#ff6b81>Ваша подписка AppleSub отозвана администратором."
+  subscription-expired: "<#ff6b81>Срок вашей подписки AppleSub истёк.</#ff6b81> <gray>Продлите её, чтобы снова пользоваться функциями."
+  join-active: "<gray>Подписка <gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> активна, осталось <white><time></white>. Меню: <click:run_command:'/sub'><#ff7ab8><u>/sub</u></#ff7ab8></click>"
+  check-active: "<gray>Подписка <#ff7ab8><player></#ff7ab8>: <#ff7ab8>активна</#ff7ab8>, осталось <white><time></white> <dark_gray>(до <date>)</dark_gray>"
+  check-inactive: "<gray>У игрока <#ff7ab8><player></#ff7ab8> нет активной подписки."
+  reload: "<gray>Конфигурация перезагружена. <dark_gray>(смена базы данных — после перезапуска)"
+  # Показывается в action bar
+  feature-toggled: "<feature> <dark_gray>»</dark_gray> <state>"
+  trash-added: "<gray>Предмет <#ff7ab8><item></#ff7ab8> добавлен в ваш список мусора."
+  trash-removed: "<gray>Предмет <#ff7ab8><item></#ff7ab8> удалён из вашего списка мусора."
+  trash-already-default: "<#ff6b81><item> уже есть в стандартном списке мусора."
+  trash-already-added: "<#ff6b81><item> уже есть в вашем списке."
+  trash-limit: "<#ff6b81>Достигнут лимит своих предметов: <white><max></white>."
+  trash-default-locked: "<#ff6b81>Стандартный мусор нельзя удалить."
+  armor-low: "<#ff2e4d>⚠</#ff2e4d> <gray>Броня ломается: <#ff7ab8><slot></#ff7ab8> <dark_gray>(<item>)</dark_gray> — прочность <white><durability>/<max></white> <dark_gray>(<percent>%)</dark_gray>. <#ff7ab8>Почините её!</#ff7ab8>"
+  armor-low-title: "<gradient:#ff2e4d:#ff7ab8><bold>Броня ломается!</bold></gradient>"
+  armor-low-subtitle: "<gray><slot>: <white><durability>/<max></white> <dark_gray>• <#ff7ab8>почините"
+  armor-broken: "<#ff2e4d>⚠</#ff2e4d> <gray>Броня сломана: <#ff7ab8><slot></#ff7ab8> <dark_gray>(<item>)</dark_gray>. <#ff7ab8>Почините или замените её!</#ff7ab8>"
+  armor-broken-title: "<gradient:#ff2e4d:#ff7ab8><bold>Броня сломана!</bold></gradient>"
+  armor-broken-subtitle: "<gray><slot> <dark_gray>• <#ff7ab8>почините или замените"
+
+menu:
+  state-on: "<#ff7ab8>✔ Включено"
+  state-off: "<gray>✘ Выключено"
+  status-on-material: PINK_DYE
+  status-off-material: GRAY_DYE
+  status-lore:
+    - "<dark_gray>Нажмите, чтобы переключить"
+  main:
+    title: "<gradient:#ff2e4d:#ff7ab8><bold>AppleSub</bold></gradient> <dark_gray>• подписка"
+    info:
+      name: "<gradient:#ff2e4d:#ff7ab8><bold><player></bold></gradient>"
+      lore:
+        - ""
+        - "<gray>Подписка: <#ff7ab8>активна"
+        - "<gray>Осталось: <white><time>"
+        - "<gray>Действует до: <white><date>"
+        - ""
+        - "<dark_gray>Нажимайте на функции ниже,"
+        - "<dark_gray>чтобы включать и выключать их."
+    close:
+      name: "<#ff2e4d>✘ Закрыть"
+    features:
+      night-vision:
+        material: ENDER_EYE
+        name: "<gradient:#ff2e4d:#ff7ab8><bold>Ночное зрение</bold></gradient>"
+        lore:
+          - ""
+          - "<gray>Вечное ночное зрение — не"
+          - "<gray>заканчивается и возвращается"
+          - "<gray>после смерти и молока."
+          - ""
+          - "<gray>Статус: <state>"
+          - ""
+          - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
+      anti-fire:
+        material: BLAZE_POWDER
+        name: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-огонь</bold></gradient>"
+        lore:
+          - ""
+          - "<gray>Скрывает огонь на вашем экране,"
+          - "<gray>когда вы горите. Урон от огня"
+          - "<gray>при этом не отключается."
+          - ""
+          - "<gray>Статус: <state>"
+          - ""
+          - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
+      anti-trash:
+        material: HOPPER
+        name: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-мусор</bold></gradient>"
+        lore:
+          - ""
+          - "<gray>Вы не подбираете мусорные"
+          - "<gray>предметы. Можно добавить свои"
+          - "<gray>предметы к стандартному списку."
+          - ""
+          - "<gray>Статус: <state>"
+          - "<gray>Своих предметов: <white><count>/<max>"
+          - ""
+          - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
+          - "<#ff7ab8>ПКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>настроить список"
+      armor-notify:
+        material: ANVIL
+        name: "<gradient:#ff2e4d:#ff7ab8><bold>Уведомления о броне</bold></gradient>"
+        lore:
+          - ""
+          - "<gray>Предупреждает со звуком наковальни,"
+          - "<gray>когда броня почти сломана"
+          - "<gray>и её пора чинить."
+          - ""
+          - "<gray>Статус: <state>"
+          - ""
+          - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"
+  trash:
+    title: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-мусор</bold></gradient> <dark_gray>• список"
+    default-entry-lore:
+      - ""
+      - "<gray>Стандартный мусор"
+      - "<dark_gray>Нельзя удалить"
+    custom-entry-lore:
+      - ""
+      - "<#ff7ab8>Ваш предмет"
+      - "<gray>Нажмите, чтобы <#ff2e4d>удалить"
+    info:
+      name: "<gradient:#ff2e4d:#ff7ab8><bold>Как добавить предмет?</bold></gradient>"
+      lore:
+        - ""
+        - "<gray>Нажмите на предмет в своём"
+        - "<gray>инвентаре — он попадёт в список"
+        - "<gray>и больше не будет подбираться."
+        - ""
+        - "<gray>Своих предметов: <white><count>/<max>"
+        - "<gray>Страница: <white><page>/<pages>"
+    back:
+      name: "<#ff7ab8>← Назад"
+    previous:
+      name: "<#ff7ab8>← Предыдущая страница"
+    next:
+      name: "<#ff7ab8>Следующая страница →"
+    toggle:
+      name: "<gradient:#ff2e4d:#ff7ab8><bold>Анти-мусор</bold></gradient>"
+      lore:
+        - ""
+        - "<gray>Статус: <state>"
+        - ""
+        - "<#ff7ab8>ЛКМ</#ff7ab8> <dark_gray>—</dark_gray> <gray>переключить"

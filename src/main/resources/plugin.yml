@@ -1,0 +1,13 @@
+name: AppleSub
+version: '${project.version}'
+main: dev.applesub.AppleSubPlugin
+api-version: '1.21.11'
+description: '${project.description}'
+author: AppleSub
+libraries:
+  - com.zaxxer:HikariCP:${hikari.version}
+
+permissions:
+  applesub.admin:
+    description: Доступ к /applesub (give, take, check, reload)
+    default: op
