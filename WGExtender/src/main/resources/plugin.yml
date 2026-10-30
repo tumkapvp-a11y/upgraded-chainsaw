@@ -1,0 +1,18 @@
+name: WGExtender
+main: wgextender.WGExtender
+version: '${project.version}'
+api-version: '1.21.11'
+description: Extends WorldGuard with extra region protection, claim limits, auto flags and more.
+author: _Shevchik_
+depend: [WorldGuard, WorldEdit]
+softdepend: [Vault]
+commands:
+  wgextender:
+    description: WGExtender admin command
+    usage: /<command> help
+    aliases: [wgex]
+    permission: wgextender.admin
+permissions:
+  wgextender.admin:
+    description: Access to /wgex
+    default: op
