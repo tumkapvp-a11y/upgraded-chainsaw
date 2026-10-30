@@ -1,0 +1,53 @@
+# WGExtender. Применить изменения: /wgex reload
+claim:
+  # Автоматически расширять выделение на всю высоту мира при /rg claim
+  vertexpand: false
+  blocklimits:
+    enabled: false
+    # Максимальный объём региона по группам Vault, "default" - для остальных.
+    # Пример:
+    #   default: 10000
+    #   vip: 50000
+    limits: {}
+    minimal:
+      volume: 0
+      horizontal: 0
+      vertical: 0
+regionprotect:
+  # Не пропускать жидкости через границы регионов
+  flow:
+    lava: false
+    water: false
+    # Прочие источники (яйцо дракона и т.п.) и любые предметы из раздатчиков
+    other: false
+  fire:
+    spread:
+      # Огонь не переходит через границы регионов
+      toregion: false
+      # Огонь не распространяется внутри регионов
+      inregion: false
+    # Блоки в регионах не сгорают
+    burn: false
+  explosion:
+    # Взрывы не ломают блоки в регионах (кроме TNT, поджённого тем, кто может строить в регионе)
+    block: false
+    # Взрывы не наносят урон сущностям в регионах
+    entity: false
+autoflags:
+  # Флаги, которые ставятся на новый регион после /rg claim. Синтаксис значения как в /rg flag.
+  # Пример:
+  #   use: allow
+  #   pvp: deny
+  enabled: false
+  flags: {}
+restrictcommands:
+  # Запрет команд на чужих регионах (где игрок не может строить). Алиасы находятся автоматически.
+  enabled: false
+  commands: []
+# Свой //wand: палка не бьёт сущности и исчезает при выбрасывании/смерти
+extendedwewand: false
+misc:
+  # default - как в WorldGuard
+  # allow - PvP разрешено везде, кроме регионов с pvp deny
+  # deny - PvP разрешено вне регионов, в регионах только с pvp allow
+  pvpmode: default
