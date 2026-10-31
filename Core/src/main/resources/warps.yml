@@ -1,0 +1,298 @@
+# ==========================================================
+#  Core — варпы, меню варпов и топы игроков
+#  Тексты в формате MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#  Символ «<» внутри текста пишется как «\<».
+#  Сообщения в чат находятся в messages.yml (разделы warp и tops).
+#  Перезагрузка: /core reload (при ошибке остаются прежние настройки).
+# ==========================================================
+
+warps:
+  # Допустимые названия варпов (регулярное выражение). Длина в любом случае не больше 32 символов.
+  # Пример с русскими буквами: '^[a-zA-Zа-яА-ЯёЁ0-9_-]{1,16}$'
+  name-pattern: '^[a-zA-Z0-9_-]{1,16}$'
+  # Сколько варпов может создать игрок без особых прав
+  default-limit: 1
+  # Лимиты по правам core.warps.<группа> (берётся наибольший из доступных).
+  # Право core.warps.unlimited снимает ограничение полностью.
+  limits:
+    vip: 2
+    premium: 3
+    admin: 10
+  # Стоимость создания варпа игроком в АР (0 — бесплатно). Серверные варпы всегда бесплатны.
+  # Если цена больше 0, а плагин экономики не подключён, создавать варпы нельзя.
+  price: 0
+  # Иконка варпа, если при создании в главной руке ничего нет (иначе берётся предмет из руки)
+  default-icon: ENDER_PEARL
+  # Миры, в которых игрокам нельзя создавать варпы (на серверные варпы не действует)
+  disabled-worlds: []
+  # Перезарядка оценки варпов в секундах (сохраняется между перезаходами и рестартами)
+  grade-cooldown-seconds: 300
+  # Формат даты создания варпа (Java DateTimeFormatter), часовой пояс сервера
+  date-format: 'dd.MM.yyyy HH:mm'
+  # Имя владельца, которое показывается у серверных варпов
+  server-owner: 'Сервер'
+  # Если ник владельца не найден в базе данных
+  unknown-owner: 'Неизвестно'
+  # Вид рейтинга (плейсхолдер <rating>): <average> — средняя оценка, <count> — количество оценок
+  rating-format: '<gold><average> ★</gold>'
+  # Рейтинг варпа, который ещё никто не оценил
+  no-rating: '<yellow>Нет оценок</yellow>'
+
+# ----------------------------------------------------------
+#  Меню. Слоты считаются с 0 (верхний левый) до rows*9-1.
+#  Плейсхолдеры в иконках варпов: <warp>, <owner>, <world>, <x>, <y>, <z>,
+#  <visits>, <rating>, <ratings> (количество оценок), <created> (дата создания).
+# ----------------------------------------------------------
+gui:
+  # Главное меню (/warp)
+  main:
+    title: '<dark_gray>Варпы</dark_gray>'
+    rows: 6
+    # Заполнитель пустых слотов
+    filler:
+      enabled: true
+      material: ORANGE_STAINED_GLASS_PANE
+    # <size> — количество серверных варпов
+    system-button:
+      slot: 20
+      material: NETHER_STAR
+      name: '<gold><bold>Варпы сервера</bold></gold>'
+      lore:
+        - ''
+        - ' <gray>Список варпов сервера</gray>'
+        - ' <gray>Посетите самые интересные места</gray>'
+        - ''
+        - ' <gold>↪</gold> <gray>Варпов сервера: <green><size></green></gray>'
+        - ''
+        - '<green><bold>Нажмите</bold></green><gray>, для просмотра</gray>'
+    # <size> — количество ваших варпов, <max> — ваш лимит
+    my-button:
+      slot: 22
+      material: ENDER_PEARL
+      name: '<gold><bold>Ваши варпы</bold></gold>'
+      lore:
+        - ''
+        - ' <gray>Список ваших варпов</gray>'
+        - ''
+        - ' <gold>↪</gold> <gray>Варпов: <yellow><size></yellow><dark_gray>/</dark_gray><green><max></green></gray>'
+        - ''
+        - '<green><bold>Нажмите</bold></green><gray>, для просмотра</gray>'
+    # <size> — количество варпов игроков
+    players-button:
+      slot: 24
+      material: PLAYER_HEAD
+      name: '<gold><bold>Варпы игроков</bold></gold>'
+      lore:
+        - ''
+        - ' <gray>Список варпов игроков</gray>'
+        - ' <gray>Посетите самые интересные места</gray>'
+        - ''
+        - ' <gold>↪</gold> <gray>Варпов игроков: <green><size></green></gray>'
+        - ''
+        - '<green><bold>Нажмите</bold></green><gray>, для просмотра</gray>'
+    close:
+      slot: 49
+      material: SPECTRAL_ARROW
+      name: '<red>Закрыть</red>'
+
+  # Варпы сервера (/serverwarp или кнопка в главном меню). Нажатие — телепортация.
+  system:
+    title: '<dark_gray>Варпы сервера</dark_gray>'
+    rows: 6
+    # Слоты для иконок варпов; если варпов больше — появляются страницы
+    content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+    filler:
+      enabled: true
+      material: ORANGE_STAINED_GLASS_PANE
+    # true — показывать голову владельца вместо иконки варпа (для серверных варпов не применяется)
+    owner-heads: false
+    warp-item:
+      name: '<gold><bold><warp></bold></gold>'
+      lore:
+        - ''
+        - '<gray>Координаты варпа:</gray>'
+        - ' <gray>Мир: <red><world></red></gray>'
+        - ' <gray>X: <red><x></red></gray>'
+        - ' <gray>Y: <red><y></red></gray>'
+        - ' <gray>Z: <red><z></red></gray>'
+        - ''
+        - '<gray>Посещений: <gold><visits></gold></gray>'
+        - ''
+        - '<green><bold>Нажмите</bold></green><gray>, чтобы телепортироваться</gray>'
+    empty-item:
+      slot: 22
+      material: BARRIER
+      name: '<red>На сервере нет активных варпов</red>'
+      lore:
+        - '<gray>В данный момент на сервере</gray>'
+        - '<gray>нет серверных варпов</gray>'
+    previous-page:
+      slot: 47
+      material: ARROW
+      name: '<yellow>← Предыдущая страница</yellow>'
+    next-page:
+      slot: 51
+      material: ARROW
+      name: '<yellow>Следующая страница →</yellow>'
+    # Возврат в главное меню (если нет права core.warp — меню закроется)
+    back:
+      slot: 49
+      material: SPECTRAL_ARROW
+      name: '<red>Назад</red>'
+
+  # Варпы игроков: сортировка по рейтингу, затем по посещениям.
+  # ЛКМ — телепортация, ПКМ — оценить варп.
+  players:
+    title: '<dark_gray>Варпы игроков</dark_gray>'
+    rows: 6
+    content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+    filler:
+      enabled: true
+      material: ORANGE_STAINED_GLASS_PANE
+    # true — вместо иконки варпа показывать голову владельца
+    owner-heads: false
+    warp-item:
+      name: '<gold><bold><warp></bold></gold>'
+      lore:
+        - ''
+        - '<gray>Владелец: <gold><owner></gold></gray>'
+        - '<gray>Дата создания: <gold><created></gold></gray>'
+        - '<gray>Оценка: <rating></gray>'
+        - '<gray>Посещений: <gold><visits></gold></gray>'
+        - '<gray>Координаты варпа:</gray>'
+        - ' <gray>Мир: <red><world></red></gray>'
+        - ' <gray>X: <red><x></red></gray>'
+        - ' <gray>Y: <red><y></red></gray>'
+        - ' <gray>Z: <red><z></red></gray>'
+        - ''
+        - '<green><bold>Нажмите ЛКМ</bold></green><gray>, чтобы телепортироваться</gray>'
+        - '<gold><bold>Нажмите ПКМ</bold></gold><gray>, чтобы оценить</gray>'
+    empty-item:
+      slot: 22
+      material: BARRIER
+      name: '<red>Нет варпов игроков</red>'
+      lore:
+        - '<gray>В данный момент на сервере</gray>'
+        - '<gray>нет публичных варпов игроков</gray>'
+    previous-page:
+      slot: 47
+      material: ARROW
+      name: '<yellow>← Предыдущая страница</yellow>'
+    next-page:
+      slot: 51
+      material: ARROW
+      name: '<yellow>Следующая страница →</yellow>'
+    back:
+      slot: 49
+      material: SPECTRAL_ARROW
+      name: '<red>Назад</red>'
+
+  # Ваши варпы. ЛКМ — телепортация, Shift + ПКМ — удалить варп.
+  my:
+    title: '<dark_gray>Ваши варпы</dark_gray>'
+    rows: 6
+    content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+    filler:
+      enabled: true
+      material: ORANGE_STAINED_GLASS_PANE
+    owner-heads: false
+    warp-item:
+      name: '<gold><bold><warp></bold></gold>'
+      lore:
+        - ''
+        - '<gray>В данный момент этот варп</gray>'
+        - '<gray>публичный. Он доступен</gray>'
+        - '<gray>для всех и каждого</gray>'
+        - ''
+        - '<gray>Оценка: <rating> <dark_gray>(<ratings>)</dark_gray></gray>'
+        - '<gray>Посещений: <gold><visits></gold></gray>'
+        - '<gray>Мир: <red><world></red> <gray>(<red><x></red>, <red><y></red>, <red><z></red>)</gray></gray>'
+        - ''
+        - '<green><bold>Нажмите ЛКМ</bold></green><gray>, чтобы телепортироваться</gray>'
+        - '<red><bold>Shift + ПКМ</bold></red><gray>, чтобы удалить</gray>'
+    empty-item:
+      slot: 22
+      material: BARRIER
+      name: '<red>У вас нет личных варпов</red>'
+      lore:
+        - '<gray>Создайте варп командой</gray>'
+        - '<yellow>/setwarp \<название></yellow>'
+    previous-page:
+      slot: 47
+      material: ARROW
+      name: '<yellow>← Предыдущая страница</yellow>'
+    next-page:
+      slot: 51
+      material: ARROW
+      name: '<yellow>Следующая страница →</yellow>'
+    back:
+      slot: 49
+      material: SPECTRAL_ARROW
+      name: '<red>Назад</red>'
+
+  # Оценка варпа (ПКМ по варпу в меню варпов игроков). Заголовок: <warp> — название варпа.
+  grade:
+    title: '<dark_gray>Оценка варпа <gold><warp></gold></dark_gray>'
+    rows: 6
+    filler:
+      enabled: true
+      material: ORANGE_STAINED_GLASS_PANE
+    # Иконка оцениваемого варпа (те же плейсхолдеры, что и в списках варпов)
+    warp-item:
+      slot: 13
+      name: '<gold><bold><warp></bold></gold>'
+      lore:
+        - ''
+        - '<gray>Владелец: <gold><owner></gold></gray>'
+        - '<gray>Дата создания: <gold><created></gold></gray>'
+        - '<gray>Оценка: <rating></gray>'
+        - '<gray>Посещений: <gold><visits></gold></gray>'
+        - '<gray>Координаты варпа:</gray>'
+        - ' <gray>Мир: <red><world></red></gray>'
+        - ' <gray>X: <red><x></red></gray>'
+        - ' <gray>Y: <red><y></red></gray>'
+        - ' <gray>Z: <red><z></red></gray>'
+        - ''
+    # Кнопки оценок (головы). <grade> — оценка от 1 до 5
+    grade-item:
+      name: '<gold><bold>Оценка <grade></bold></gold>'
+      lore:
+        - ''
+        - ' <gray>Нажмите сюда для</gray>'
+        - ' <gray>установки оценки <gold><grade></gold></gray>'
+        - ''
+    # Оценка → слот и текстура головы (значение textures в base64)
+    grades:
+      '5':
+        slot: 29
+        texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJlODViOTMxYjY4ZDZjZDk1YmFjZGExOGRkOGMwODZjZmJlNmIzZjc5ZTY0ZTNiZDNjOGVlMGRhNmE5ZDMyIn19fQ=='
+      '4':
+        slot: 30
+        texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTgzYzZiYmRiYTZhODc3Zjk5NmQ4YzNkZDFkOWI4NDUwODViZTFiZGIyZjUzNWUyYjZmOGZjM2M2NTg5YjEifX19'
+      '3':
+        slot: 31
+        texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmJlNTk3M2U0ZTc5MTYyMzk5M2U2N2MyNDliNzJmM2M1MTYwZjkxZDY5MjZhM2E4NzU2YmM1NDNmMzgzNTIzMiJ9fX0='
+      '2':
+        slot: 32
+        texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTE3MzgxYWE0Y2M3M2Q5ZDc5ODk0MTc0NTc2ZWJmMzRmN2ZlNDAzNDZhYmI4YzcxYWRjNTczZWE4YzdlYzUifX19'
+      '1':
+        slot: 33
+        texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzMwNDFjMmVhODI3YmY2NjFiNjQ3MmE4ZTMxMGY2NTFiMjk0ODNhNWZkN2U3NDEzOTdmOTZjMTUxNWIxNjgifX19'
+    # Возврат в меню варпов игроков
+    back:
+      slot: 49
+      material: SPECTRAL_ARROW
+      name: '<red>Назад</red>'
+
+# ----------------------------------------------------------
+#  Топы: /baltop, /killtop, /deathtop
+#  Списки обновляются в фоне раз в refresh-minutes минут; команды показывают последний результат.
+# ----------------------------------------------------------
+tops:
+  # Интервал обновления в минутах (1–1440)
+  refresh-minutes: 5
+  # Сколько игроков показывать (1–100)
+  size: 10
+  # SQL-запрос топа по балансу: должен вернуть (ник, баланс) и содержать ровно один «?» — лимит строк.
+  # Таблицу economy_accounts создаёт плагин Economy. Пока её нет, /baltop недоступен (в консоль одно предупреждение).
+  balance-query: 'SELECT name, balance FROM economy_accounts ORDER BY balance DESC LIMIT ?'

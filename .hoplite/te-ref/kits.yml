@@ -1,0 +1,40 @@
+default:
+  cooldown: 172800
+  price: 5
+  slot: 10
+  autoEquipment: true
+  canBuy: true
+  canGet: true
+  start: false
+  mainGroup: "default" # Только эта группа может брать
+  #group: "default" # Все группы от default
+  groupPrefix: '§8§lИгрок'
+  localized_name: §8§lИгрок
+  icon:
+    ==: org.bukkit.inventory.ItemStack
+    type: GRAY_SHULKER_BOX
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      display-name: ''
+      lore: [ ]
+  items: []
+admin:
+  cooldown: 259200
+  price: 199
+  slot: 11
+  canBuy: true
+  canGet: true
+  start: false
+  mainGroup: "admin"
+  groupPrefix: '§4§lАДМИН'
+  localized_name: §4§lАДМИН
+  icon:
+    ==: org.bukkit.inventory.ItemStack
+    type: RED_SHULKER_BOX
+    meta:
+      ==: ItemMeta
+      meta-type: UNSPECIFIC
+      display-name: ''
+      lore: []
+  items: []
