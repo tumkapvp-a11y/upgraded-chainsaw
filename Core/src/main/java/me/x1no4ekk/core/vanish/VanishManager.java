@@ -12,7 +12,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Set;
 import java.util.UUID;
@@ -20,25 +19,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Vanish state of online players (persisted in core_users.vanish, re-applied on join).
- * Uses {@link Player#hidePlayer(org.bukkit.plugin.Plugin, Player)}; the "vanished" metadata is set for
- * compatibility with other plugins and always removed on unvanish, quit and disable.
+ * Uses {@link Player#hidePlayer(org.bukkit.plugin.Plugin, Player)}; no metadata is attached to players.
  */
 public final class VanishManager implements Listener {
 
     public static final String USE_PERMISSION = "core.vanish";
     public static final String SEE_PERMISSION = "core.vanish.see";
-    private static final String METADATA_KEY = "vanished";
 
     private final CorePlugin plugin;
     private final Set<UUID> vanished = ConcurrentHashMap.newKeySet();
 
     public VanishManager(CorePlugin plugin) {
         this.plugin = plugin;
-        plugin.sessions().onQuit(player -> {
-            if (vanished.remove(player.getUniqueId())) {
-                player.removeMetadata(METADATA_KEY, plugin);
-            }
-        });
+        plugin.sessions().onQuit(player -> vanished.remove(player.getUniqueId()));
     }
 
     public boolean isVanished(UUID uuid) {
@@ -70,10 +63,8 @@ public final class VanishManager implements Listener {
         }
         if (value) {
             vanished.add(uuid);
-            player.setMetadata(METADATA_KEY, new FixedMetadataValue(plugin, true));
         } else {
             vanished.remove(uuid);
-            player.removeMetadata(METADATA_KEY, plugin);
         }
         for (Player other : Bukkit.getOnlinePlayers()) {
             if (other.getUniqueId().equals(uuid)) {
@@ -140,7 +131,6 @@ public final class VanishManager implements Listener {
             if (player == null) {
                 continue;
             }
-            player.removeMetadata(METADATA_KEY, plugin);
             for (Player other : Bukkit.getOnlinePlayers()) {
                 other.showPlayer(plugin, player);
             }
