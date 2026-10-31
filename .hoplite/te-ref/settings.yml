@@ -1,0 +1,195 @@
+socketApi: true
+kitsGuiEnabled: true
+helpPlace: true
+helpPlaceCommand: '/abstractmenu open help'
+kitCommand: '/am open kits_menu' # работает если kitsGuiEnabled - false
+maxOnline:
+  admin:
+    permission: 'maxonline.admin'
+    kickMessage: '§cКупите админа'
+    online: 200  # если больше 200, то заходить могу типы только если есть maxonline.admin
+  illuminate:
+    permission: 'maxonline.illuminate'
+    kickMessage: '§cКупите иллюмината'
+    online: 180  # если больше 180, то заходить могу типы только если есть maxonline.illuminate
+  helper:
+    permission: 'maxonline.helper'
+    kickMessage: '§cКупите хелпера'
+    online: 150 # если больше 150, то заходить могу типы только если есть maxonline.helper
+database:
+  mysqlUser: 'root'
+  mysqlPassword: ''
+  mysqlDbname: 'TrustEssentials'
+  mysqlPort: 3306
+  mysqlHost: 'localhost'
+  kits: 'sqlite' # киты
+  users: 'sqlite' # tpToggle, fly, god, msgToggle, bossbarToggle, chatToggle
+  homes: 'sqlite' # хомы
+  ignores: 'sqlite' # игноры и тд
+  statistic: 'sqlite' # статистика
+  warps: 'sqlite' # варпы
+  enderChests: 'sqlite' # эндерчесты
+timeCooldown: true
+timeCooldownMillis: 60000 # 1 минута
+timeWorld:
+  - 'world'
+weatherCooldown: true
+weatherCooldownMillis: 60000 # 1 минута
+spawnTp: true
+spawnFlyOff: false
+pumpingEnderChest: true
+survivalOnSpawn: false
+portalCreate: true
+voidWorld: 'spawn'
+voidLevel: 10
+weatherWorld:
+  - 'world'
+chatMessageEvents: true
+hoverChatEvent: true
+hoverChatEventAction: SHOW_TEXT
+hoverChatEventText:
+  - '&7Игрок &7%name%'
+  - '&r'
+  - '&8Нажмите, чтобы открыть статистику'
+clickChatEvent: true
+clickChatEventAction: RUN_COMMAND
+clickChatEventText: '/stats %name%'
+chatMessageClick: ''
+globalChat: true
+globalLocalChat: true
+rainbowAdMessage: true
+rainbowBuyMessage: true
+rainbowSellMessage: true
+rainbowChatMessage: true
+rainbowDonateChatMessage: true
+rainbowStaffChatMessage: true
+rainbowPrivateChatMessage: true
+privateChatCooldown: true
+privateChatCooldownMillis: 10000
+donateChatCooldown: true
+donateChatCooldownMillis: 30000
+staffChatCooldown: true
+staffChatCooldownMilis: 3000
+adCooldown: true
+adCooldownMillis: 120000
+sellCooldown: true
+sellCooldownMillis: 120000
+buyCooldown: true
+buyCooldownMillis: 120000
+streamCooldown: true
+streamCooldownMillis: 1800000
+videoCooldown: true
+videoCooldownMillis: 1800000
+broadcastCooldown: true
+broadcastCooldownMillis: 120000
+gradeCooldown: 60000
+backBlock: true
+joinChatCooldown: 10000
+joinTitle: true
+chatAdditionalSuffix:
+  admin: '&c&l'
+backTime: 60000 # 60 секунд
+localChatRadius: 200 # 200 блоков
+globalFormat: '&8[&6G&8] %prefix%%player%&7: &f%additionalSuffix%%message%'
+localFormat: '&8[&eL&8] %prefix%%player%&7:&7 %message%'
+donateChatFormat: '&6Донат Чат &7| &8%prefix%%player%&7:&7 %message%'
+staffChatFormat: '&cПерсонал Чат &7| &8%prefix%%player%&7:&f %message%'
+privateChatFormatSender: '&8[&6SMS&8] &8Вы &e→ &8%prefixTarget%%target%&7:&f %message%'
+privateChatFormatTarget: '&8[&6SMS&8] &8%prefixSender%%sender% &e→ &8Вам &7:&f %message%'
+socialSpyFormat: '&8[&cSMS&8] &8%prefixSender%%sender%&7 &e→ &8%prefixTarget%%target%:&f %message%'
+targetSpyFormat: '&8[&cCMD&8] &8%prefixSender%%sender%&7: &f%command%'
+vanishMessageCooldown: 20 # 1 секунда
+cooldownChat: 4000 # 4 секунды
+nearRadius: 200
+repairBuy: true
+flyOtherCooldown: 60000
+teleportingTime: 4000
+teleportingBarColor: 'GREEN'
+teleportingBarStyle: 'SOLID'
+teleportingParticlesRed: 0.001
+teleportingParticlesGreen: 0.9
+teleportingParticlesBlue: 0.5
+repairAllCost: 5000
+godAfterTeleport: 3500 # milliseconds
+repairCost: 100
+enderChestRowPrice: 50
+lengthFakeName: 16
+spawn: world;-53.5;149.0;-20.5;0.0;-90.0
+setHomeDefault: 1
+setHomeLimit:
+  - admin:10
+setWarpDefault: 0
+setWarpLimit:
+  - admin:10
+systemWarps:
+  shop:
+    localized_name: §6§l። §6§nРынок
+    slot: 10
+    world: world
+    x: 19.0
+    y: 149.0
+    z: -44.5
+    yaw: -180.0
+    pitch: 0.0
+    icon: CHEST
+killermoney: true
+spectateMaxDistance: 10
+rtpRegion: true
+rtpNear: true
+rtpBig: true
+rtpDefault: true
+rtpSize: 1000
+rtpTeleportRadius: 200
+rtpBigSize: 4000
+rtpNearSize: 5000
+rtpTargetMinimalTime: 15 # 15 minutes
+rtpCooldown: 10000
+rtpNearCooldown: 20000
+rtpBigCooldown: 15000
+rtpRegionCooldown: 1800000 # WorldEdit, WorldGuard need
+rtpCooldownBypass: true
+rtpWorld: 'world'
+chatUseMinimalTime: 36000
+payComission: 25
+helpCommand: true
+pluginsCommand: true
+flyElytra: true
+guiGlassColor: 1
+bossbars:
+  first:
+    time: 200
+    color: RED
+    style: SOLID
+    title: '&7Скидки на донат: &6www.trustgrief.ru'
+hpViewer: true
+hpViewerOutput: '&6&l%name%: %usestyle%'
+hpOnlyPlayer: false
+filledHpIcon: '§4❤'
+halfHpIcon: '§c❤'
+emptyHpIcon: '§7❤'
+noDamage: false # запрет урона
+noHunger: false # запрет голода
+noExplosion: false # запрет взрывов
+noBreak: false # запрет ломания блоков
+noPlace: false # запрет установки блоков
+noFire: false # запрет распространения огня
+noWeather: false # запрет погоды
+noWheat: false # запрет топтания посевов
+noTab: false # отключение отображения ников в табе
+noMessages: false # отключает сообщения при входе/выходе/кике/смерти
+noChat: false # отключает чат
+hidePlayers: false # отключает видимость всех игроков
+noDrop: false # отключает выбрасывание предметов
+noInventoryClick: false # отключает клик в инвентаре
+teleportRegionBlock:
+  - 'DIAMOND_BLOCK'
+noCommands: false
+whiteListCommands:
+  - 'l'
+  - 'login'
+  - 'reg'
+  - 'register'
+timeFixedWorld:
+  - 'World'
+timeFixed: false # Зафиксировать время
+timeMeaning: 0 # Время на которое будет зафиксирован
