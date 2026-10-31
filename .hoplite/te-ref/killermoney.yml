@@ -1,0 +1,15 @@
+player:
+  procent: 10 # 10% от баланса таргета
+  actionbar: '&eВы получили %money% с игрока %player%'
+  message: '&eВы получили %money% с игрока %player%'
+  sound: 'BLOCK_NOTE_PLING'
+  target_message: '&eВы потеряли %money%'
+  target_actionbar: '&eВы потеряли %money%'
+  commands: [] # %killer% - убийца, %target% - жертва
+entities:
+  CREEPER:
+    pay: 5-50
+    message: '&eВы получили 5 монет за убийство крипера'
+    sound: 'BLOCK_NOTE_PLING'
+    actionbar: '&eВы получили 5 монет за убийство крипера'
+    commands: []
