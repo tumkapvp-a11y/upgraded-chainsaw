@@ -1,0 +1,141 @@
+tp:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Телепортироваться к игроку: <red>/tp \<игрок>'
+    - '<gold>┃ <gray>Телепортировать игрока к другому: <red>/tp \<игрок> \<цель>'
+    - '<gold>┃ <gray>Телепортироваться по координатам: <red>/tp \<x> \<y> \<z>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  tphere-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Телепортировать к себе игрока: <red>/tphere \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  tppos-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Телепортироваться по координатам:'
+    - '<gold>┃ <red>/tppos \<x> \<y> \<z> [поворот] [наклон] [мир]'
+    - '<gold>┃ <gray>Символ <red>~</red> — относительно текущей позиции, например <red>~ ~10 ~'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  tpall-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Телепортировать к себе всех игроков: <red>/tpall'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  self: '<prefix><gray>Нельзя телепортироваться к самому себе.'
+  same-player: '<prefix><gray>Нельзя телепортировать игрока к нему же.'
+  teleported: '<prefix><gray>Вы телепортировались к игроку <gold><player></gold>.'
+  teleported-other: '<prefix><gray>Вы телепортировали игрока <gold><player></gold> к игроку <gold><target></gold>.'
+  here: '<prefix><gray>Вы телепортировали к себе игрока <gold><player></gold>.'
+  here-target: '<prefix><gray>Игрок <gold><player></gold> телепортировал вас к себе.'
+  position: '<prefix><gray>Вы телепортировались на: <gold><world></gold>, x: <gold><x></gold>, y: <gold><y></gold>, z: <gold><z></gold>.'
+  world-not-found: '<prefix><red>Мир <gold><world></gold> не найден.'
+  all: '<prefix><gray>Вы телепортировали к себе всех игроков: <gold><count></gold>.'
+  all-empty: '<prefix><gray>На сервере нет других игроков.'
+  all-target: '<prefix><gray>Игрок <gold><player></gold> телепортировал к себе всех игроков.'
+
+tpa:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Отправить запрос на телепортацию: <red>/tpa \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  accept-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Принять запрос на телепортацию: <red>/tpaccept [игрок]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  deny-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Отклонить запрос на телепортацию: <red>/tpdeny [игрок]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  cancel-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Отменить свои запросы на телепортацию: <red>/tpcancel [игрок]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  toggle-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Включить или отключить запросы на телепортацию: <red>/tptoggle'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  self: '<prefix><gray>Нельзя отправить запрос на телепортацию самому себе.'
+  disabled: '<prefix><gray>У игрока <gold><player></gold> отключены запросы на телепортацию.'
+  ignored: '<prefix><gray>Игрок <gold><player></gold> не принимает от вас запросы на телепортацию.'
+  already-sent: '<prefix><gray>Вы уже отправили запрос на телепортацию игроку <gold><player></gold>.'
+  cooldown: '<prefix><gray>Подождите ещё <gold><time></gold> перед следующим запросом.'
+  sent: '<prefix><gray>Вы отправили запрос на телепортацию игроку <gold><player></gold>. Он действует <gold><seconds></gold> сек.'
+  # <accept> и <deny> — кнопки, их текст задаётся ниже (button-*)
+  received:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Игрок <gold><player></gold> хочет телепортироваться к вам'
+    - '<gold>┃ <accept> <deny>'
+    - '<gold>┃ <gray>Запрос действует <gold><seconds></gold> сек.'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  button-accept: '<green><bold>[Принять]</bold>'
+  button-accept-hover: '<gray>Нажмите, чтобы принять запрос от <gold><player>'
+  button-deny: '<red><bold>[Отклонить]</bold>'
+  button-deny-hover: '<gray>Нажмите, чтобы отклонить запрос от <gold><player>'
+  no-requests: '<prefix><gray>У вас нет запросов на телепортацию.'
+  no-request-from: '<prefix><gray>У вас нет запросов на телепортацию от игрока <gold><player></gold>.'
+  accepted: '<prefix><gray>Вы приняли запрос на телепортацию от игрока <gold><player></gold>.'
+  accepted-sender: '<prefix><gray>Игрок <gold><player></gold> принял ваш запрос на телепортацию.'
+  teleported: '<prefix><gray>Вы были телепортированы к игроку <gold><player></gold>.'
+  teleported-target: '<prefix><gray>Игрок <gold><player></gold> был телепортирован к вам.'
+  denied: '<prefix><gray>Вы отклонили запрос на телепортацию от игрока <gold><player></gold>.'
+  denied-sender: '<prefix><gray>Игрок <gold><player></gold> отклонил ваш запрос на телепортацию.'
+  cancelled: '<prefix><gray>Вы отменили запрос на телепортацию к игроку <gold><player></gold>.'
+  cancelled-target: '<prefix><gray>Игрок <gold><player></gold> отменил запрос на телепортацию к вам.'
+  no-outgoing: '<prefix><gray>У вас нет отправленных запросов на телепортацию.'
+  no-outgoing-to: '<prefix><gray>Вы не отправляли запрос на телепортацию игроку <gold><player></gold>.'
+  expired-sender: '<prefix><gray>Время запроса на телепортацию к игроку <gold><player></gold> истекло.'
+  expired-target: '<prefix><gray>Время запроса на телепортацию от игрока <gold><player></gold> истекло.'
+  quit: '<prefix><gray>Запрос на телепортацию отменён: игрок <gold><player></gold> вышел с сервера.'
+  toggle-on: '<prefix><gray>Вы <green>включили</green> запросы на телепортацию.'
+  toggle-off: '<prefix><gray>Вы <red>отключили</red> запросы на телепортацию.'
+
+back:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Вернуться на предыдущую локацию: <red>/back'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  not-found: '<prefix><gray>Предыдущая локация не найдена.'
+  teleported: '<prefix><gray>Вы были телепортированы на предыдущую локацию.'
+
+top:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Подняться на самый верх: <red>/top'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  teleported: '<prefix><gray>Вы поднялись на самый верх.'
+  already: '<prefix><gray>Вы уже на самом верху.'
+  unsafe: '<prefix><red>Наверху нет безопасного места.'
+
+spawn:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Телепортироваться на спавн: <red>/spawn'
+    - '<gold>┃ <gray>Телепортировать игрока на спавн: <red>/spawn \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  setspawn-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Установить точку спавна на своей позиции: <red>/setspawn'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  set: '<prefix><gray>Вы установили точку спавна: <gold><world></gold>, x: <gold><x></gold>, y: <gold><y></gold>, z: <gold><z></gold>.'
+  teleported: '<prefix><gray>Вы были телепортированы на спавн.'
+  teleported-other: '<prefix><gray>Вы переместили игрока <gold><player></gold> на спавн.'
+  teleported-by: '<prefix><gray>Игрок <gold><player></gold> переместил вас на спавн.'
+
+rtp:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Меню случайной телепортации: <red>/rtp'
+    - '<gold>┃ <gray>Случайная телепортация: <red>/rtp \<вариант>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  unknown-option: '<prefix><red>Вариант <gold><option></gold> не найден. <gray>Доступные: <gold><options></gold>'
+  no-permission: '<prefix><red>Этот вариант случайной телепортации вам недоступен.'
+  cooldown: '<prefix><gray>Подождите ещё <red><time></red>.'
+  already-searching: '<prefix><gray>Подождите, вы уже телепортируетесь.'
+  world-not-found: '<prefix><red>Мир <gold><world></gold> недоступен.'
+  economy-unavailable: '<prefix><red>Экономика недоступна: платная телепортация временно отключена.'
+  not-enough-money: '<prefix><red>Недостаточно АР: <gray>нужно <gold><price> АР</gold>, у вас <gold><balance> АР</gold>.'
+  no-players: '<prefix><gray>Игрок для <red>телепортации</red> не найден, попробуйте снова.'
+  searching: '<prefix><gray>Ищем безопасное место для телепортации...'
+  not-found: '<prefix><gray>Безопасное место для <red>телепортации</red> не найдено, попробуйте снова.'
+  teleported: '<prefix><gray>Вы были телепортированы на координаты <green><world></green>, <green><x></green>, <green><y></green>, <green><z></green>.'
+  teleported-near: '<prefix><gray>Вы были телепортированы, игроков поблизости: <green><players></green>.'
+  charged: '<prefix><gray>С вашего счёта списано <gold><price> АР</gold>.'
+  payment-failed: '<prefix><red>Не удалось списать <gold><price> АР</gold> за телепортацию.'
