@@ -1,0 +1,105 @@
+
+# ---------------------------------------------------------- варпы
+warp:
+  setwarp-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Создать варп: <red>/setwarp \<название>'
+    - '<gold>┃ <gray>Создать варп сервера: <red>/setwarp \<название> server'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  delwarp-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Удалить варп: <red>/delwarp \<название>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  warp-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Меню варпов: <red>/warp'
+    - '<gold>┃ <gray>Телепорт на варп: <red>/warp \<название>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  warpinfo-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Информация о варпе: <red>/warpinfo \<название>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  serverwarp-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Варпы сервера: <red>/serverwarp'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  invalid-name: '<prefix><gray>Вы не можете использовать такое название варпа.'
+  already-exists: '<prefix><gray>Варп <gold><warp></gold> уже существует.'
+  limit: '<prefix><gray>Максимальное количество ваших варпов: <gold><limit></gold>.'
+  created: '<prefix><gray>Вы создали варп <gold><warp></gold>.'
+  created-paid: '<prefix><gray>Вы создали варп <gold><warp></gold> за <gold><price></gold>.'
+  created-server: '<prefix><gray>Вы создали варп сервера <gold><warp></gold>.'
+  not-enough-money: '<prefix><red>Недостаточно средств: создание варпа стоит <gold><price></gold>.'
+  economy-unavailable: '<prefix><red>Экономика сейчас недоступна, создать платный варп нельзя.'
+  spectator: '<prefix><red>Нельзя создать варп в режиме наблюдателя.'
+  disabled-world: '<prefix><red>В этом мире нельзя создавать варпы.'
+  not-found: '<prefix><gray>Варп <gold><warp></gold> не найден.'
+  not-owner: '<prefix><gray>Вы не можете удалить чужой варп <gold><warp></gold>.'
+  deleted: '<prefix><gray>Вы удалили варп <gold><warp></gold>.'
+  teleported: '<prefix><gray>Вы телепортировались на варп <gold><warp></gold>.'
+  world-not-loaded: '<prefix><red>Мир <gold><world></gold> недоступен.'
+  # <warp>, <type>, <owner>, <world>, <x>, <y>, <z>, <visits>, <rating>, <ratings>, <created>
+  info:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Варп: <red><warp></red> <dark_gray>(<type>)</dark_gray>'
+    - '<gold>┃ <gray>Владелец: <red><owner>'
+    - '<gold>┃ <gray>Мир: <red><world></red> <gray>(<red><x></red>, <red><y></red>, <red><z></red>)'
+    - '<gold>┃ <gray>Посещений: <red><visits>'
+    - '<gold>┃ <gray>Оценка: <rating> <gray>(оценок: <red><ratings></red>)'
+    - '<gold>┃ <gray>Дата создания: <red><created>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  type-server: 'варп сервера'
+  type-player: 'варп игрока'
+  grade-own: '<prefix><gray>Вы не можете оценить свой варп.'
+  grade-cooldown: '<prefix><gray>Перед следующей оценкой подождите <gold><time></gold>.'
+  graded: '<prefix><gray>Вы оценили варп <gold><warp></gold> на <gold><grade></gold>.'
+  # Владельцу варпа, если он в сети. <player> — кто оценил
+  grade-received: '<prefix><gray>Игрок <gold><player></gold> оценил ваш варп <gold><warp></gold> на <gold><grade></gold>.'
+
+# ---------------------------------------------------------- топы (/baltop, /killtop, /deathtop)
+# <updated> — сколько времени прошло с последнего обновления списка
+tops:
+  usage: '<prefix><gray>Использование: <red>/<command>'
+  not-ready: '<prefix><gray>Топ ещё не сформирован, попробуйте чуть позже.'
+  empty: '<prefix><gray>В топе пока никого нет.'
+  # Номер места (<place> в строке топа). <position> — номер
+  place:
+    first: '<green>[<position>]'
+    second: '<yellow>[<position>]'
+    third: '<gold>[<position>]'
+    other: '<red>[<position>]'
+  # Строка: <place>, <position>, <name> — ник, <value> — значение
+  balance:
+    header:
+      - '<gold>[$]</gold> <white>ТОП по <gold>балансу</gold>:'
+      - ''
+    line: ' <place> <white><name></white><gray>:</gray> <gold><value></gold>'
+    footer:
+      - ''
+      - '<gray>Обновлено <gold><updated></gold> назад.'
+  kills:
+    header:
+      - '<gold>[⚔]</gold> <white>ТОП по <gold>убийствам</gold>:'
+      - ''
+    line: ' <place> <white><name></white><gray>:</gray> <gold><value></gold>'
+    footer:
+      - ''
+      - '<gray>Обновлено <gold><updated></gold> назад.'
+  deaths:
+    header:
+      - '<gold>[☠]</gold> <white>ТОП по <gold>смертям</gold>:'
+      - ''
+    line: ' <place> <white><name></white><gray>:</gray> <gold><value></gold>'
+    footer:
+      - ''
+      - '<gray>Обновлено <gold><updated></gold> назад.'
+
+# ---------------------------------------------------------- KillerMoney (настройки в killermoney.yml)
+# <amount> — сумма, <player> — второй игрок (жертва для убийцы и наоборот), <entity> — моб
+killer-money:
+  killer: '<prefix><gray>Вы получили <gold><amount></gold> с игрока <gold><player></gold>.'
+  killer-actionbar: '<yellow>+<amount></yellow> <gray>за убийство <gold><player></gold>'
+  victim: '<prefix><gray>Вы потеряли <red><amount></red>: вас убил <gold><player></gold>.'
+  victim-actionbar: '<red>-<amount></red>'
+  mob: '<prefix><gray>Вы получили <gold><amount></gold> за убийство <gold><entity></gold>.'
+  mob-actionbar: '<yellow>+<amount></yellow> <gray>за <entity>'
