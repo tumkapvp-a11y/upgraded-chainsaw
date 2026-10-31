@@ -1,0 +1,60 @@
+name: Core
+version: '${project.version}'
+main: me.x1no4ekk.core.CorePlugin
+api-version: '1.21'
+author: x1no4ekk
+description: 'Ядро сервера: пользователи, хомы через Рог телепортации, утилиты (Paper 1.21.11, MySQL)'
+load: POSTWORLD
+
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - Economy
+
+commands:
+  core:
+    description: 'Администрирование плагина Core'
+    usage: '/core <reload|horn> [игрок] [количество]'
+    permission: core.admin
+  sethome:
+    description: 'Создать точку дома'
+    usage: '/sethome <название>'
+    permission: core.sethome
+  delhome:
+    description: 'Удалить точку дома'
+    usage: '/delhome <название>'
+    permission: core.delhome
+  playerhome:
+    description: 'Посмотреть точки дома игрока'
+    usage: '/playerhome <игрок> [дом]'
+    permission: core.playerhome
+  home:
+    description: 'Подсказка: телепортация домой работает только через Рог телепортации'
+    usage: '/home'
+    aliases: [homes]
+
+permissions:
+  core.admin:
+    description: 'Доступ к /core reload и /core horn'
+    default: op
+  core.sethome:
+    description: 'Создание точек дома'
+    default: true
+  core.delhome:
+    description: 'Удаление точек дома'
+    default: true
+  core.playerhome:
+    description: 'Просмотр и телепортация к точкам дома других игроков'
+    default: op
+  core.horn.use:
+    description: 'Использование Рога телепортации'
+    default: true
+  core.horn.craft:
+    description: 'Крафт Рога телепортации'
+    default: true
+  core.horn.bypass-cooldown:
+    description: 'Использование Рога телепортации без перезарядки'
+    default: op
+  core.homes.unlimited:
+    description: 'Без ограничения количества точек дома'
+    default: op
