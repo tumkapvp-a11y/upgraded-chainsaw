@@ -88,6 +88,14 @@ final class Schema {
                 PRIMARY KEY (uuid, kit)
             )""" + TABLE_OPTIONS,
             """
+            CREATE TABLE IF NOT EXISTS core_cooldowns (
+                uuid          CHAR(36) CHARACTER SET ascii NOT NULL,
+                cooldown_key  VARCHAR(64) NOT NULL,
+                expires_at    BIGINT      NOT NULL,
+                PRIMARY KEY (uuid, cooldown_key),
+                INDEX idx_core_cooldowns_expires (expires_at)
+            )""" + TABLE_OPTIONS,
+            """
             CREATE TABLE IF NOT EXISTS core_ignores (
                 uuid          CHAR(36) CHARACTER SET ascii NOT NULL,
                 ignored_uuid  CHAR(36) CHARACTER SET ascii NOT NULL,

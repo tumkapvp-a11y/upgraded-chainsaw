@@ -100,6 +100,7 @@ public final class DatabaseManager {
             for (String ddl : Schema.STATEMENTS) {
                 statement.execute(ddl);
             }
+            statement.executeUpdate("DELETE FROM core_cooldowns WHERE expires_at < " + System.currentTimeMillis());
         }
     }
 

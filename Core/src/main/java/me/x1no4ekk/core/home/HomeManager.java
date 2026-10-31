@@ -6,7 +6,6 @@ import me.x1no4ekk.core.user.User;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 import java.util.Locale;
@@ -133,18 +132,5 @@ public final class HomeManager {
      */
     public CompletableFuture<List<Home>> loadHomes(UUID owner) {
         return database.query(connection -> repository.findByOwner(connection, owner));
-    }
-
-    /**
-     * Asynchronous, chunk-loading-safe teleport. The future completes on the main thread.
-     *
-     * @return {@code false} if the world is not loaded or the teleport was cancelled
-     */
-    public CompletableFuture<Boolean> teleport(Player player, Home home) {
-        Location location = home.toLocation();
-        if (location == null) {
-            return CompletableFuture.completedFuture(false);
-        }
-        return player.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 }
