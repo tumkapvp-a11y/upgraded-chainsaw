@@ -1,0 +1,45 @@
+  core.warp:
+    description: 'Меню варпов и телепортация на варпы (/warp)'
+    default: true
+  core.setwarp:
+    description: 'Создание своих варпов (/setwarp)'
+    default: true
+  core.warp.server:
+    description: 'Создание варпов сервера (/setwarp <название> server)'
+    default: op
+  core.delwarp:
+    description: 'Удаление своих варпов (/delwarp)'
+    default: true
+  core.delwarp.others:
+    description: 'Удаление чужих варпов и варпов сервера'
+    default: op
+  core.warpinfo:
+    description: 'Информация о варпе (/warpinfo)'
+    default: true
+  core.serverwarp:
+    description: 'Меню варпов сервера (/serverwarp)'
+    default: true
+  core.warps.unlimited:
+    description: 'Без ограничения количества варпов'
+    default: op
+  core.warps.vip:
+    description: 'Лимит варпов группы vip (warps.yml → warps.limits)'
+    default: false
+  core.warps.premium:
+    description: 'Лимит варпов группы premium (warps.yml → warps.limits)'
+    default: false
+  core.warps.admin:
+    description: 'Лимит варпов группы admin (warps.yml → warps.limits)'
+    default: false
+  core.baltop:
+    description: 'Топ игроков по балансу (/baltop)'
+    default: true
+  core.killtop:
+    description: 'Топ игроков по убийствам (/killtop)'
+    default: true
+  core.deathtop:
+    description: 'Топ игроков по смертям (/deathtop)'
+    default: true
+  core.killermoney:
+    description: 'Получение награды KillerMoney за убийства'
+    default: true
