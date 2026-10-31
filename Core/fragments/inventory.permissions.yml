@@ -1,0 +1,72 @@
+  core.kit:
+    description: 'Меню наборов и команда /kit (получение конкретного набора — право core.kit.<id>)'
+    default: true
+  core.kit.admin:
+    description: 'Создание, удаление и выдача наборов: /kit create, /kit delete, /kit give'
+    default: op
+  core.kit.start:
+    description: 'Получение набора start'
+    default: true
+  core.kit.food:
+    description: 'Получение набора food'
+    default: true
+  core.kit.warrior:
+    description: 'Получение набора warrior'
+    default: true
+  core.enderchest:
+    description: 'Свой многостраничный эндер-сундук: /enderchest и блок эндер-сундука'
+    default: true
+  core.enderchest.others:
+    description: 'Просмотр эндер-сундука другого игрока (в том числе оффлайн)'
+    default: op
+  core.enderchest.others.modify:
+    description: 'Изменение эндер-сундука другого игрока'
+    default: op
+  core.enderchest.pages.2:
+    description: 'Эндер-сундук: 2 страницы (действует наибольшее core.enderchest.pages.<N> до max-pages)'
+    default: false
+  core.enderchest.pages.3:
+    description: 'Эндер-сундук: 3 страницы'
+    default: false
+  core.enderchest.pages.4:
+    description: 'Эндер-сундук: 4 страницы'
+    default: false
+  core.enderchest.pages.5:
+    description: 'Эндер-сундук: 5 страниц'
+    default: false
+  core.enderchest.pages.6:
+    description: 'Эндер-сундук: 6 страниц'
+    default: false
+  core.invsee:
+    description: 'Просмотр инвентаря другого игрока: /invsee'
+    default: op
+  core.invsee.modify:
+    description: 'Изменение инвентаря другого игрока через /invsee'
+    default: op
+  core.invsee.exempt:
+    description: 'Защита собственного инвентаря от /invsee'
+    default: false
+  core.workbench:
+    description: 'Переносной верстак: /workbench, /wb, /craft'
+    default: op
+  core.anvil:
+    description: 'Переносная наковальня: /anvil'
+    default: op
+  core.carttable:
+    description: 'Переносной стол картографа: /carttable, /cartographytable'
+    default: op
+  core.etable:
+    description: 'Переносной стол зачарований: /etable, /enchanttable'
+    default: op
+  core.grindstone:
+    description: 'Переносное точило: /grindstone'
+    default: op
+  core.loom:
+    description: 'Переносной ткацкий станок: /loom'
+    default: op
+  core.smithtable:
+    description: 'Переносной кузнечный стол: /smithtable, /smithingtable'
+    default: op
+  core.stonecutter:
+    description: 'Переносной камнерез: /stonecutter'
+    default: op
