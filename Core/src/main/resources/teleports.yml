@@ -1,0 +1,159 @@
+# ==========================================================
+#  Core — телепортация
+#  /tp, /tphere, /tppos, /tpall, /tpa, /back, /top, /spawn, /rtp
+#
+#  Тексты сообщений — в messages.yml (разделы tp, tpa, back, top, spawn, rtp).
+#  Задержка перед телепортацией, отмена при движении/уроне и боссбар — в settings.yml (раздел teleport).
+#  Все тексты — MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#  Изменения применяются командой /core reload.
+# ==========================================================
+
+# ----------------------------------------------------------
+#  Запросы на телепортацию (/tpa, /tpaccept, /tpdeny, /tpcancel, /tptoggle)
+# ----------------------------------------------------------
+tpa:
+  # Сколько секунд действует запрос (5–3600). Истёкший запрос удаляется, обе стороны получают уведомление.
+  expire-seconds: 60
+  # Пауза между отправкой запросов одним игроком, в секундах (0 — без паузы)
+  cooldown-seconds: 5
+  # Звук, который слышит получатель запроса (пустой key — без звука)
+  request-sound:
+    key: 'minecraft:entity.experience_orb.pickup'
+    volume: 1.0
+    pitch: 1.0
+
+# ----------------------------------------------------------
+#  Спавн (/spawn, /setspawn)
+#  Точка спавна хранится в MySQL (таблица core_locations). Пока она не установлена,
+#  используется точка спавна основного мира.
+# ----------------------------------------------------------
+spawn:
+  # Телепортировать на спавн игроков, впервые зашедших на сервер
+  teleport-new-players: true
+  # Телепортировать на спавн при каждом входе на сервер
+  teleport-on-join: false
+  # Возрождать на спавне игроков, у которых нет кровати или якоря возрождения
+  respawn-at-spawn: true
+  # Всегда возрождать на спавне, даже если у игрока есть кровать или якорь возрождения
+  always-respawn-at-spawn: false
+
+# ----------------------------------------------------------
+#  Случайная телепортация (/rtp)
+#  /rtp — меню с вариантами, /rtp <вариант> — сразу выбранный вариант.
+# ----------------------------------------------------------
+rtp:
+  gui:
+    title: '<dark_gray>Случайная телепортация'
+    # Количество строк меню (1–6)
+    rows: 5
+    # Заполнитель пустых слотов
+    filler:
+      enabled: true
+      material: GRAY_STAINED_GLASS_PANE
+    # Значение плейсхолдера <price> для бесплатных вариантов
+    price-free: '<green>бесплатно'
+    # Значение плейсхолдера <price> для платных вариантов (<amount> — сумма)
+    price-format: '<gold><amount> АР'
+    # Значение плейсхолдера <status> — состояние варианта для открывшего меню игрока
+    status:
+      # Можно телепортироваться
+      ready: '<green><bold>Нажмите</bold><gray>, чтобы телепортироваться'
+      # Перезарядка (<time> — сколько осталось)
+      cooldown: '<dark_gray>▪ <gray>Будет доступно через: <red><time>'
+      # Нет права на этот вариант
+      no-permission: '<dark_gray>▪ <gray>Доступно от привилегии: <dark_red><bold>АДМИН'
+      # Не хватает АР (<price> — стоимость, <balance> — баланс игрока)
+      no-money: '<dark_gray>▪ <red>Недостаточно АР: <gray>нужно <price><gray>, у вас <gold><balance> АР'
+
+  # Блоки, на которые нельзя телепортировать.
+  # Вода, лава, огонь, магма, кактусы, рыхлый снег и костры запрещены всегда.
+  unsafe-blocks:
+    - SWEET_BERRY_BUSH
+    - POINTED_DRIPSTONE
+    - COBWEB
+    - WITHER_ROSE
+    - FIRE_CORAL_BLOCK
+    - SCAFFOLDING
+    - BIG_DRIPLEAF
+
+  # Варианты телепортации. Ключ — идентификатор варианта (a-z, 0-9, _ и -), он используется в /rtp <вариант>.
+  #
+  #   slot             — слот в меню (0 — левый верхний)
+  #   material         — предмет в меню
+  #   name, lore       — название и описание предмета. Плейсхолдеры:
+  #                      <min-radius>, <max-radius>, <world>, <option>, <price>, <cooldown> (полная перезарядка),
+  #                      <status> (готово / перезарядка / нет права / не хватает АР)
+  #   permission       — право на вариант (по умолчанию core.rtp.<вариант>, '' — доступно всем с core.rtp)
+  #   world            — мир телепортации. Для миров-незеров место ищется под потолком из бедрока.
+  #   type             — RANDOM: случайная точка в кольце вокруг центра;
+  #                      NEAR_PLAYER: случайная точка рядом со случайным игроком в этом мире
+  #   center           — центр для RANDOM: SPAWN (точка спавна мира) или координаты 'x z', например '0 0'
+  #   min-radius       — минимальное расстояние от центра (или от игрока)
+  #   max-radius       — максимальное расстояние от центра (или от игрока)
+  #   cooldown-seconds — перезарядка в секундах, сохраняется после перезахода и рестарта (0 — без перезарядки)
+  #   price            — стоимость в АР (0 — бесплатно). Списывается только после успешной телепортации.
+  #   max-attempts     — сколько случайных точек проверить, прежде чем сдаться (1–50)
+  #
+  # Право core.rtp.bypass-cooldown отключает перезарядку всех вариантов.
+  options:
+    default:
+      slot: 20
+      material: GRASS_BLOCK
+      name: '<gray>Телепортация в случайное место'
+      lore:
+        - ''
+        - ' <gray>Телепортирует вас в случайное место'
+        - ' <gray>Радиус: <red><max-radius>'
+        - ' <gray>Стоимость: <price>'
+        - ''
+        - ' <status>'
+      permission: 'core.rtp.default'
+      world: world
+      type: RANDOM
+      center: SPAWN
+      min-radius: 100
+      max-radius: 1000
+      cooldown-seconds: 10
+      price: 0
+      max-attempts: 10
+
+    near:
+      slot: 22
+      material: IRON_SWORD
+      name: '<gray>Телепортация около игроков'
+      lore:
+        - ''
+        - ' <gray>Телепортирует вас вблизи других игроков'
+        - ' <gray>Расстояние до игрока: <red>до <max-radius></red> блоков'
+        - ' <gray>Стоимость: <price>'
+        - ''
+        - ' <status>'
+      permission: 'core.rtp.near'
+      world: world
+      type: NEAR_PLAYER
+      min-radius: 30
+      max-radius: 200
+      cooldown-seconds: 20
+      price: 0
+      max-attempts: 10
+
+    far:
+      slot: 24
+      material: ENDER_PEARL
+      name: '<gray>Дальняя телепортация'
+      lore:
+        - ''
+        - ' <gray>Телепортирует вас далеко от спавна'
+        - ' <gray>Радиус: <green><max-radius>'
+        - ' <gray>Стоимость: <price>'
+        - ''
+        - ' <status>'
+      permission: 'core.rtp.far'
+      world: world
+      type: RANDOM
+      center: SPAWN
+      min-radius: 1000
+      max-radius: 4000
+      cooldown-seconds: 15
+      price: 0
+      max-attempts: 15
