@@ -1,0 +1,114 @@
+chat:
+  console-name: 'Консоль'
+  muted: '<prefix><red>Чат временно отключён администрацией.'
+  cooldown: '<prefix><gray>Слишком быстро! Подождите ещё <red><time></red>.'
+  join-delay: '<prefix><gray>Вы только что зашли на сервер. Писать в чат можно через <yellow><time></yellow>.'
+  nobody-heard: '<prefix><gray>Вас никто не услышал. Чтобы написать всему серверу, начните сообщение с <gold><symbol></gold>.'
+  admin-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Очистить чат: <red>/chat clear'
+    - '<gold>┃ <gray>Отключить чат: <red>/chat mute'
+    - '<gold>┃ <gray>Включить чат: <red>/chat unmute'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  cleared: '<prefix><gray>Чат очищен игроком <gold><player></gold>.'
+  muted-broadcast: '<prefix><red>Чат отключён игроком <gold><player></gold>.'
+  unmuted-broadcast: '<prefix><green>Чат снова включён игроком <gold><player></gold>.'
+  already-muted: '<prefix><gray>Чат уже отключён.'
+  not-muted: '<prefix><gray>Чат и так включён.'
+  toggle-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Включить/выключить чат: <red>/chattoggle'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  toggle-on: '<prefix><gray>Вы <green>включили</green> чат.'
+  toggle-off: '<prefix><gray>Вы <red>отключили</red> чат. Включить обратно: <gold>/chattoggle</gold>.'
+  donate-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Написать в донат-чат: <red>/donatechat \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  staff-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Написать в чат персонала: <red>/staffchat \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+
+msg:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Написать сообщение: <red>/msg \<игрок> \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  reply-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Ответить на сообщение: <red>/reply \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  self: '<prefix><gray>Вы не можете отправить сообщение самому себе.'
+  not-accepting: '<prefix><gray>Игрок <gold><player></gold> не принимает сообщения.'
+  target-disabled: '<prefix><gray>Игрок <gold><player></gold> отключил личные сообщения.'
+  cooldown: '<prefix><gray>Подождите ещё <red><time></red> перед следующим сообщением.'
+  reply-not-found: '<prefix><gray>Последний собеседник не найден.'
+  toggle-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Включить/выключить личные сообщения: <red>/msgtoggle'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  toggle-on: '<prefix><gray>Вы <green>включили</green> личные сообщения.'
+  toggle-off: '<prefix><gray>Вы <red>отключили</red> личные сообщения.'
+
+ignore:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Добавить/удалить из игнора: <red>/ignore \<игрок>'
+    - '<gold>┃ <gray>Список игнорируемых: <red>/ignore list'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  self: '<prefix><gray>Вы не можете игнорировать самого себя.'
+  exempt: '<prefix><gray>Игрока <gold><player></gold> нельзя игнорировать.'
+  added: '<prefix><gray>Вы добавили игрока <gold><player></gold> в игнор-лист. <dark_gray>(Напишите /ignore <player> ещё раз, чтобы убрать его)'
+  removed: '<prefix><gray>Вы убрали игрока <gold><player></gold> из игнор-листа. <dark_gray>(Напишите /ignore <player> ещё раз, чтобы вернуть его)'
+  list: '<prefix><gray>Игнор-лист (<gold><count></gold>): <white><players>'
+  list-empty: '<prefix><gray>Ваш игнор-лист пуст.'
+
+spy:
+  social-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Включить/выключить слежку за ЛС: <red>/socialspy'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  social-on: '<prefix><gray>Вы <green>включили</green> слежку за личными сообщениями.'
+  social-off: '<prefix><gray>Вы <red>выключили</red> слежку за личными сообщениями.'
+  target-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Следить за игроком: <red>/targetspy \<игрок>'
+    - '<gold>┃ <gray>Прекратить слежку: <red>/targetspy off'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  target-self: '<prefix><gray>Вы не можете следить за самим собой.'
+  target-on: '<prefix><gray>Вы следите за игроком <gold><player></gold>: его личные сообщения и команды.'
+  target-off: '<prefix><gray>Вы перестали следить за игроком <gold><player></gold>.'
+  target-none: '<prefix><gray>Вы ни за кем не следите.'
+  target-quit: '<prefix><gray>Игрок <gold><player></gold> вышел с сервера, слежка остановлена.'
+
+broadcast:
+  broadcast-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Написать объявление всему серверу: <red>/broadcast \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  ad-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Рекламировать: <red>/adbroadcast \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  buy-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Сказать всем, что хотите купить: <red>/buybroadcast \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  sell-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Сказать всем о своей продаже: <red>/sellbroadcast \<сообщение>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  stream-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Анонсировать трансляцию: <red>/streambroadcast \<ссылка> [текст]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  video-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Анонсировать видео: <red>/videobroadcast \<ссылка> [текст]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  invalid-link: '<prefix><gray>Введите корректную ссылку, начинающуюся с <gold>http://</gold> или <gold>https://</gold>.'
+  cooldown: '<prefix><gray>Слишком быстро! Следующее объявление можно отправить через <red><time></red>.'
+  economy-unavailable: '<prefix><red>Экономика сейчас недоступна, платные объявления отключены.'
+  not-enough-money: '<prefix><gray>Объявление стоит <gold><price> АР</gold>, у вас <gold><balance> АР</gold>.'
+  paid: '<prefix><gray>С вашего счёта списано <gold><price> АР</gold> за объявление.'
