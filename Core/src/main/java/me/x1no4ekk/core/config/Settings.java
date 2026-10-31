@@ -1,5 +1,6 @@
 package me.x1no4ekk.core.config;
 
+import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,20 +23,96 @@ import java.util.regex.PatternSyntaxException;
  */
 public record Settings(
         DatabaseSettings database,
+        Set<String> disabledCommands,
         UserSettings users,
+        TeleportSettings teleport,
+        CombatSettings combat,
         HomeSettings homes,
         HornSettings horn,
         HomeGuiSettings homeGui
 ) {
 
     public static Settings load(YamlConfiguration config) {
+        Set<String> disabled = new HashSet<>();
+        for (String command : config.getStringList("disabled-commands")) {
+            disabled.add(command.toLowerCase(Locale.ROOT).replace("/", ""));
+        }
         return new Settings(
                 DatabaseSettings.load(section(config, "database")),
+                Set.copyOf(disabled),
                 UserSettings.load(section(config, "users")),
+                TeleportSettings.load(section(config, "teleport")),
+                CombatSettings.load(section(config, "combat")),
                 HomeSettings.load(section(config, "homes")),
                 HornSettings.load(section(config, "teleport-horn")),
                 HomeGuiSettings.load(section(config, "home-gui"))
         );
+    }
+
+    public record SoundSettings(String key, float volume, float pitch) {
+        static SoundSettings load(ConfigurationSection s) {
+            if (s == null) {
+                return new SoundSettings("", 1F, 1F);
+            }
+            return new SoundSettings(s.getString("key", ""), (float) s.getDouble("volume", 1.0), (float) s.getDouble("pitch", 1.0));
+        }
+
+        public boolean enabled() {
+            return key != null && !key.isBlank();
+        }
+    }
+
+    public record TeleportSettings(
+            int warmupSeconds,
+            boolean cancelOnMove,
+            boolean cancelOnDamage,
+            int invulnerabilityTicks,
+            boolean bossbarEnabled,
+            String bossbarTitle,
+            BossBar.Color bossbarColor,
+            BossBar.Overlay bossbarOverlay,
+            SoundSettings sound
+    ) {
+        static TeleportSettings load(ConfigurationSection s) {
+            ConfigurationSection bar = section(s, "bossbar");
+            return new TeleportSettings(
+                    Math.max(0, s.getInt("warmup-seconds", 4)),
+                    s.getBoolean("cancel-on-move", true),
+                    s.getBoolean("cancel-on-damage", true),
+                    Math.max(0, s.getInt("invulnerability-ticks", 0)),
+                    bar.getBoolean("enabled", true),
+                    bar.getString("title", "<green>Телепортация через <white><seconds></white> сек."),
+                    parseEnum(BossBar.Color.class, bar.getString("color", "GREEN"), "teleport.bossbar.color"),
+                    parseEnum(BossBar.Overlay.class, bar.getString("overlay", "PROGRESS"), "teleport.bossbar.overlay"),
+                    SoundSettings.load(s.getConfigurationSection("sound"))
+            );
+        }
+    }
+
+    public record CombatSettings(
+            boolean enabled,
+            int durationSeconds,
+            boolean punishOnQuit,
+            boolean disableFlight,
+            boolean disableElytra,
+            boolean actionbar,
+            Set<String> allowedCommands
+    ) {
+        static CombatSettings load(ConfigurationSection s) {
+            Set<String> allowed = new HashSet<>();
+            for (String command : s.getStringList("allowed-commands")) {
+                allowed.add(command.toLowerCase(Locale.ROOT).replace("/", ""));
+            }
+            return new CombatSettings(
+                    s.getBoolean("enabled", true),
+                    Math.max(1, s.getInt("duration-seconds", 15)),
+                    s.getBoolean("punish-on-quit", true),
+                    s.getBoolean("disable-flight", true),
+                    s.getBoolean("disable-elytra", true),
+                    s.getBoolean("actionbar", true),
+                    Set.copyOf(allowed)
+            );
+        }
     }
 
     public record DatabaseSettings(
@@ -285,6 +362,14 @@ public record Settings(
     private static String qualified(ConfigurationSection parent, String path) {
         String base = parent.getCurrentPath();
         return base == null || base.isEmpty() ? path : base + "." + path;
+    }
+
+    private static <E extends Enum<E>> E parseEnum(Class<E> type, String raw, String path) {
+        try {
+            return Enum.valueOf(type, raw.trim().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new IllegalArgumentException(path + ": unknown value '" + raw + "'");
+        }
     }
 
     private static Material parseMaterial(String raw, String path, boolean requireItem) {
