@@ -1,0 +1,63 @@
+kit:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Меню наборов: <red>/kit'
+    - '<gold>┃ <gray>Получить набор: <red>/kit \<набор>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  admin-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Меню наборов: <red>/kit'
+    - '<gold>┃ <gray>Получить набор: <red>/kit \<набор>'
+    - '<gold>┃ <gray>Создать набор из своего инвентаря: <red>/kit create \<набор> [перезарядка в сек.]'
+    - '<gold>┃ <gray>Удалить набор: <red>/kit delete \<набор>'
+    - '<gold>┃ <gray>Выдать набор игроку: <red>/kit give \<набор> \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  none: '<prefix><gray>На сервере пока нет ни одного набора.'
+  not-found: '<prefix><gray>Набор <gold><kit></gold> не найден.'
+  no-permission: '<prefix><red>У вас нет доступа к набору <kit><red>.'
+  already-claimed: '<prefix><gray>Набор <kit> <gray>можно получить только один раз — вы его уже получили.'
+  cooldown: '<prefix><gray>Набор <kit> <gray>будет доступен через <red><time></red>.'
+  inventory-full: '<prefix><red>Недостаточно места в инвентаре для набора <kit><red>. Освободите место и попробуйте снова.'
+  dropped: '<prefix><gray>Часть предметов не поместилась в инвентарь и выпала под ноги.'
+  economy-unavailable: '<prefix><red>Платные наборы сейчас недоступны: экономика не подключена.'
+  not-enough-money: '<prefix><gray>Для набора <kit> <gray>нужно <aqua><price> АР</aqua>, а у вас <aqua><balance> АР</aqua>.'
+  claimed: '<prefix><gray>Вы получили набор <kit><gray>.'
+  claimed-paid: '<prefix><gray>Вы получили набор <kit> <gray>за <aqua><price> АР</aqua>.'
+  first-join: '<prefix><gray>Добро пожаловать! Вы получили набор <kit><gray>.'
+  invalid-id: '<prefix><red>Недопустимое название набора <gold><kit></gold><red>. Можно латинские буквы, цифры, «_» и «-» (до 32 символов); create, delete и give заняты.'
+  already-exists: '<prefix><gray>Набор <gold><kit></gold> уже существует.'
+  create-empty: '<prefix><red>Ваш инвентарь пуст — сохранять в набор нечего.'
+  gui-full: '<prefix><red>В меню наборов нет свободного слота. Увеличьте gui.rows в kits.yml.'
+  created: '<prefix><gray>Набор <gold><kit></gold> создан: <gold><items></gold> предм., перезарядка: <gold><cooldown></gold>. Право на получение: <gold>core.kit.<kit></gold>.'
+  deleted: '<prefix><gray>Набор <gold><kit></gold> удалён.'
+  not-in-file: '<prefix><red>Набор <gold><kit></gold> <red>не найден в файле kits.yml сервера — удалите его вручную.'
+  file-error: '<prefix><red>Не удалось изменить kits.yml: <gray><error>'
+  given: '<prefix><gray>Игроку <gold><player></gold> выдан набор <kit><gray>.'
+  received: '<prefix><gray>Вам выдан набор <kit><gray>.'
+  give-no-space: '<prefix><red>У игрока <gold><player></gold> <red>недостаточно места в инвентаре для набора <kit><red>.'
+
+enderchest:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Открыть эндер-сундук: <red>/enderchest'
+    - '<gold>┃ <gray>Открыть эндер-сундук игрока: <red>/enderchest \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  # Показывается над панелью быстрого доступа, пока сундук загружается из базы.
+  loading: '<gray>Загрузка эндер-сундука...'
+  page-locked: '<prefix><gray>Страница <gold><page></gold> эндер-сундука вам недоступна.'
+  read-only: '<prefix><gray>Эндер-сундук игрока <gold><player></gold> открыт <red>только для просмотра</red>.'
+  imported: '<prefix><gray>Предметы из обычного эндер-сундука (<gold><amount></gold> предм.) перенесены в ваш эндер-сундук.'
+  import-no-space: '<prefix><red>Не удалось перенести предметы из обычного эндер-сундука: не хватает места. Они остались в нём.'
+
+invsee:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Посмотреть инвентарь игрока: <red>/invsee \<игрок>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  self: '<prefix><red>Нельзя открыть собственный инвентарь.'
+  exempt: '<prefix><red>Инвентарь игрока <gold><player></gold> <red>нельзя просматривать.'
+  opened: '<prefix><gray>Вы открыли инвентарь игрока <gold><player></gold>.'
+  opened-read-only: '<prefix><gray>Инвентарь игрока <gold><player></gold> открыт <red>только для просмотра</red>.'
+
+workstation:
+  usage: '<prefix><gray>Использование: <red>/<command>'
