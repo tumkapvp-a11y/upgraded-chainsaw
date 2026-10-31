@@ -1,0 +1,143 @@
+# ==========================================================
+#  Core — основные настройки (Paper 1.21.11)
+#  Автор: x1no4ekk
+#  Все тексты поддерживают MiniMessage: <red>, <#ff8800>, <gradient:...>, <bold> и т.д.
+# ==========================================================
+
+# Подключение к MySQL (обязательно). Если подключиться не удалось — плагин выключится.
+database:
+  host: 'localhost'
+  port: 3306
+  name: 'minecraft'
+  username: 'root'
+  password: ''
+  # Класс JDBC-драйвера. MySQL Connector/J уже встроен в Paper.
+  driver-class: 'com.mysql.cj.jdbc.Driver'
+  pool:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    # Все значения ниже — в миллисекундах
+    connection-timeout: 5000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+    keepalive-time: 0
+    # 0 — выключено. Например, 10000 — предупреждение в консоль, если соединение не возвращено в пул за 10 секунд.
+    leak-detection-threshold: 0
+  # Дополнительные свойства JDBC-драйвера
+  properties:
+    useSSL: 'false'
+    allowPublicKeyRetrieval: 'true'
+    useUnicode: 'true'
+    characterEncoding: 'utf8'
+    serverTimezone: 'UTC'
+    cachePrepStmts: 'true'
+    prepStmtCacheSize: '250'
+    prepStmtCacheSqlLimit: '2048'
+    useServerPrepStmts: 'true'
+    rewriteBatchedStatements: 'true'
+    cacheServerConfiguration: 'true'
+    elideSetAutoCommits: 'true'
+    maintainTimeStats: 'false'
+
+users:
+  # Как часто сохранять изменённые данные онлайн-игроков (в минутах)
+  autosave-interval-minutes: 5
+  # Максимальное время загрузки данных игрока при входе (в секундах). При превышении вход отклоняется.
+  load-timeout-seconds: 10
+
+homes:
+  # Количество точек дома по умолчанию
+  default-limit: 1
+  # Лимиты по правам: core.homes.<группа>. Берётся максимальное значение из доступных.
+  # Право core.homes.unlimited снимает ограничение.
+  limits:
+    vip: 3
+    premium: 5
+    admin: 10
+  # Допустимое название точки дома (регулярное выражение)
+  name-pattern: '^[a-zA-Zа-яА-ЯёЁ0-9_-]{1,16}$'
+  # Миры, в которых нельзя ставить точки дома
+  disabled-worlds: []
+
+# Рог телепортации — единственный способ телепортироваться к своим точкам дома
+teleport-horn:
+  name: '<gradient:#ffd36b:#ff8a3d><bold>Рог телепортации</bold></gradient>'
+  lore:
+    - ''
+    - '<gray>Древний рог, хранящий память</gray>'
+    - '<gray>о ваших точках дома.</gray>'
+    - ''
+    - '<yellow>ПКМ</yellow> <gray>— открыть список домов</gray>'
+  # Эффект зачарования на предмете
+  glint: true
+  # Инструмент рога (влияет на описание предмета): ponder, sing, seek, feel, admire, call, yearn, dream
+  instrument: 'minecraft:ponder_goat_horn'
+  # Перезарядка после телепортации (в секундах). 0 — без перезарядки.
+  cooldown-seconds: 10
+  # Звук при телепортации
+  sound:
+    key: 'minecraft:item.goat_horn.sound.0'
+    volume: 1.0
+    pitch: 1.0
+  recipe:
+    enabled: true
+    # Открыть рецепт в книге рецептов при входе
+    discover-on-join: true
+    # Сетка 3x3. Пробел — пустая ячейка.
+    shape:
+      - 'EDE'
+      - 'DHD'
+      - 'EDE'
+    ingredients:
+      E: ENDER_PEARL
+      D: DIAMOND
+      H: GOAT_HORN
+
+# Меню домов (HomeGui)
+home-gui:
+  title: '<dark_gray>Точки дома</dark_gray>'
+  # Заголовок при просмотре чужих домов (/playerhome). <player> — ник владельца
+  title-other: '<dark_gray>Дома игрока <gold><player></gold></dark_gray>'
+  rows: 6
+  # Слоты для иконок домов
+  content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+  filler:
+    enabled: true
+    material: ORANGE_STAINED_GLASS_PANE
+  home-item:
+    # Материал иконки в зависимости от типа мира
+    materials:
+      NORMAL: GRASS_BLOCK
+      NETHER: NETHERRACK
+      THE_END: END_STONE
+      CUSTOM: COMPASS
+    # Плейсхолдеры: <home>, <world>, <x>, <y>, <z>
+    name: '<gold><bold><home></bold></gold>'
+    lore:
+      - ''
+      - '<gray>Координаты дома:</gray>'
+      - ' <gray>Мир: <red><world></red></gray>'
+      - ' <gray>X: <red><x></red></gray>'
+      - ' <gray>Y: <red><y></red></gray>'
+      - ' <gray>Z: <red><z></red></gray>'
+      - ''
+      - '<green><bold>Нажмите</bold></green><gray>, чтобы телепортироваться</gray>'
+  empty-item:
+    slot: 22
+    material: BARRIER
+    name: '<red>У вас нет точек дома</red>'
+    lore:
+      - '<gray>Создайте точку дома командой</gray>'
+      - '<yellow>/sethome <название></yellow>'
+  previous-page:
+    slot: 47
+    material: ARROW
+    name: '<yellow>← Предыдущая страница</yellow>'
+  next-page:
+    slot: 51
+    material: ARROW
+    name: '<yellow>Следующая страница →</yellow>'
+  close:
+    slot: 49
+    material: SPECTRAL_ARROW
+    name: '<red>Закрыть</red>'
