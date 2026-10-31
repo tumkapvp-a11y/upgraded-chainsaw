@@ -1,0 +1,106 @@
+# ==========================================================
+#  Core — KillerMoney: награды в АР за убийства
+#  Работает только при наличии Vault и плагина экономики (проверяется при каждом убийстве).
+#  Сообщения по умолчанию находятся в messages.yml (раздел killer-money).
+#  Звук: строка с ключом ('minecraft:block.note_block.pling') или раздел key / volume / pitch.
+#  Пустой ключ звука ('') — без звука.
+#  Перезагрузка: /core reload (при ошибке остаются прежние настройки).
+# ==========================================================
+
+# Включить KillerMoney
+enabled: true
+# Награда только игрокам с правом core.killermoney (по умолчанию оно есть у всех)
+require-permission: true
+# Не награждать убийц в творческом режиме
+ignore-creative: true
+# Не награждать за мобов из спавнеров
+ignore-spawner-mobs: true
+
+# Убийство игрока: убийца забирает часть баланса жертвы
+player:
+  enabled: true
+  # Процент баланса жертвы, который получает убийца (0–100)
+  percent: 10
+  # Защита от фарма: один и тот же убийца получает деньги за одну и ту же жертву
+  # не чаще, чем раз в указанное число секунд (0 — без ограничения)
+  cooldown-seconds: 600
+  # Звук для убийцы
+  killer-sound:
+    key: 'minecraft:block.note_block.pling'
+    volume: 1.0
+    pitch: 1.5
+  # Звук для жертвы
+  victim-sound:
+    key: 'minecraft:entity.villager.no'
+    volume: 1.0
+    pitch: 1.0
+  # Команды от имени консоли после выплаты. <killer> — убийца, <target> — жертва, <amount> — сумма (число)
+  commands: []
+
+# Убийство мобов. Ключ — тип моба (CREEPER, ZOMBIE, minecraft:skeleton ...).
+#   reward     — награда «мин-макс» (случайная сумма с двумя знаками после запятой) или одно число
+#   name       — название моба для <entity> (MiniMessage); если не указано — перевод из клиента игрока
+#   message    — своё сообщение в чат (по умолчанию killer-money.mob); '' — не отправлять
+#   actionbar  — своё сообщение над хотбаром (по умолчанию killer-money.mob-actionbar); '' — не отправлять
+#   sound      — звук
+#   commands   — команды от имени консоли: <player> — убийца, <entity> — моб, <amount> — сумма (число)
+# Плейсхолдеры в message / actionbar: <prefix>, <amount>, <player>, <entity>
+entities:
+  CREEPER:
+    reward: '5-50'
+    name: 'крипера'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  ZOMBIE:
+    reward: '1-5'
+    name: 'зомби'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  SKELETON:
+    reward: '1-5'
+    name: 'скелета'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  SPIDER:
+    reward: '1-4'
+    name: 'паука'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  ENDERMAN:
+    reward: '5-15'
+    name: 'эндермена'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  WITCH:
+    reward: '5-15'
+    name: 'ведьмы'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  BLAZE:
+    reward: '5-15'
+    name: 'ифрита'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  WITHER_SKELETON:
+    reward: '10-25'
+    name: 'скелета-иссушителя'
+    sound: 'minecraft:block.note_block.pling'
+    commands: []
+  WITHER:
+    reward: '500-1000'
+    name: 'иссушителя'
+    message: '<prefix><gray>Вы получили <gold><amount></gold> за победу над <dark_purple>иссушителем</dark_purple>!'
+    sound:
+      key: 'minecraft:ui.toast.challenge_complete'
+      volume: 1.0
+      pitch: 1.0
+    commands: []
+  ENDER_DRAGON:
+    reward: '1000-2000'
+    name: 'дракона Края'
+    message: '<prefix><gray>Вы получили <gold><amount></gold> за победу над <light_purple>драконом Края</light_purple>!'
+    sound:
+      key: 'minecraft:ui.toast.challenge_complete'
+      volume: 1.0
+      pitch: 1.0
+    commands: []

@@ -4,7 +4,14 @@ import me.x1no4ekk.core.CorePlugin;
 import me.x1no4ekk.core.gui.HomeGui;
 import me.x1no4ekk.core.user.User;
 import org.bukkit.Keyed;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.TileState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Openable;
+import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,10 +25,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Recipe;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 /**
  * Right-click with the Teleport Horn opens the home menu instead of playing the horn.
  */
 public final class HornListener implements Listener {
+
+    private static final Set<Material> INTERACTABLE = EnumSet.of(
+            Material.CRAFTING_TABLE, Material.CARTOGRAPHY_TABLE, Material.GRINDSTONE, Material.LOOM,
+            Material.SMITHING_TABLE, Material.STONECUTTER, Material.ENCHANTING_TABLE, Material.CRAFTER,
+            Material.NOTE_BLOCK, Material.REPEATER, Material.COMPARATOR, Material.DAYLIGHT_DETECTOR,
+            Material.RESPAWN_ANCHOR, Material.CAKE, Material.FLOWER_POT, Material.COMPOSTER, Material.CAULDRON,
+            Material.WATER_CAULDRON, Material.LAVA_CAULDRON, Material.POWDER_SNOW_CAULDRON, Material.BELL);
 
     private final CorePlugin plugin;
     private final TeleportHorn horn;
@@ -52,7 +69,7 @@ public final class HornListener implements Listener {
         }
         // Keep vanilla block interaction (doors, chests...) unless the player is sneaking.
         Block block = event.getClickedBlock();
-        if (action == Action.RIGHT_CLICK_BLOCK && block != null && block.getType().isInteractable() && !player.isSneaking()) {
+        if (action == Action.RIGHT_CLICK_BLOCK && block != null && isInteractable(block) && !player.isSneaking()) {
             return;
         }
         event.setUseInteractedBlock(Event.Result.DENY);
@@ -74,6 +91,20 @@ public final class HornListener implements Listener {
             return;
         }
         HomeGui.own(plugin, user).open(player);
+    }
+
+    /**
+     * Blocks whose right-click action should win over the horn (Material#isInteractable is deprecated).
+     */
+    private static boolean isInteractable(Block block) {
+        if (block.getState(false) instanceof TileState) {
+            return true; // chests, furnaces, ender chests, signs, beacons...
+        }
+        BlockData data = block.getBlockData();
+        if (data instanceof Openable || data instanceof Switch || data instanceof Bed) {
+            return true; // doors, trapdoors, gates, levers, buttons, beds
+        }
+        return INTERACTABLE.contains(block.getType()) || Tag.ANVIL.isTagged(block.getType());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
