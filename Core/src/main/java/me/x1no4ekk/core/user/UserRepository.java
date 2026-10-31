@@ -44,6 +44,11 @@ public final class UserRepository {
             "SELECT ignored_uuid FROM core_ignores WHERE uuid = ?";
     private static final String SELECT_KITS =
             "SELECT kit, last_used FROM core_kit_cooldowns WHERE uuid = ?";
+    private static final String SELECT_COOLDOWNS =
+            "SELECT cooldown_key, expires_at FROM core_cooldowns WHERE uuid = ? AND expires_at > ?";
+    private static final String UPSERT_COOLDOWN =
+            "INSERT INTO core_cooldowns (uuid, cooldown_key, expires_at) VALUES (?, ?, ?) "
+                    + "ON DUPLICATE KEY UPDATE expires_at = VALUES(expires_at)";
     private static final String SELECT_UUID_BY_NAME =
             "SELECT uuid, name FROM core_users WHERE name = ? ORDER BY last_join DESC LIMIT 1";
 
@@ -81,9 +86,10 @@ public final class UserRepository {
         List<Home> homes = homeRepository.findByOwner(connection, uuid);
         List<UUID> ignores = selectIgnores(connection, uuid);
         Map<String, Long> kits = selectKits(connection, uuid);
+        Map<String, Long> cooldowns = selectCooldowns(connection, uuid, now);
 
         User user = new User(uuid, name, stored.firstJoin(), now, false);
-        user.load(withStats, homes, ignores, kits);
+        user.load(withStats, homes, ignores, kits, cooldowns);
         if (!name.equals(stored.name())) {
             user.markDirty();
         }
@@ -153,6 +159,29 @@ public final class UserRepository {
             }
         }
         return Optional.empty();
+    }
+
+    public void saveCooldown(Connection connection, UUID uuid, String key, long expiresAt) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(UPSERT_COOLDOWN)) {
+            statement.setString(1, uuid.toString());
+            statement.setString(2, key);
+            statement.setLong(3, expiresAt);
+            statement.executeUpdate();
+        }
+    }
+
+    private Map<String, Long> selectCooldowns(Connection connection, UUID uuid, long now) throws SQLException {
+        Map<String, Long> result = new HashMap<>();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COOLDOWNS)) {
+            statement.setString(1, uuid.toString());
+            statement.setLong(2, now);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    result.put(rs.getString("cooldown_key"), rs.getLong("expires_at"));
+                }
+            }
+        }
+        return result;
     }
 
     private UserSnapshot selectUser(Connection connection, UUID uuid) throws SQLException {

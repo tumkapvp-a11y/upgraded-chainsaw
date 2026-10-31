@@ -146,6 +146,35 @@ public final class UserManager {
         }
     }
 
+    // ---------------------------------------------------------------- persistent cooldowns
+
+    /**
+     * @return milliseconds left on a persistent cooldown (survives relogs and restarts), 0 if none
+     */
+    public long getCooldownRemaining(User user, String key) {
+        long expiry = user.getCooldownExpiry(key);
+        return expiry == 0 ? 0 : Math.max(0, expiry - System.currentTimeMillis());
+    }
+
+    /**
+     * Starts a persistent cooldown: cached in the user and written to core_cooldowns asynchronously.
+     * Use for long cooldowns (minutes+); short ones belong in an in-memory CooldownTracker.
+     */
+    public void startCooldown(User user, String key, long durationMillis) {
+        if (durationMillis <= 0) {
+            return;
+        }
+        long expiresAt = System.currentTimeMillis() + durationMillis;
+        user.putCooldown(key, expiresAt);
+        UUID uuid = user.getUuid();
+        database.update(connection -> repository.saveCooldown(connection, uuid, key, expiresAt))
+                .whenComplete((ignored, error) -> {
+                    if (error != null) {
+                        logger.log(Level.SEVERE, "Failed to save cooldown '" + key + "' of " + uuid, error);
+                    }
+                });
+    }
+
     // ---------------------------------------------------------------- unloading
 
     /**
