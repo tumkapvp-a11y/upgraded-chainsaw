@@ -7,7 +7,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 import java.util.function.IntSupplier;
@@ -15,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Loads users on pre-login (async thread) and unloads them on quit.
+ * Loads users on pre-login (async thread). Unloading on quit is done by SessionManager.
  */
 public final class UserListener implements Listener {
 
@@ -79,10 +78,5 @@ public final class UserListener implements Listener {
     private static void applyJoin(User user, String name) {
         user.setName(name);
         user.setLastJoin(System.currentTimeMillis());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onQuit(PlayerQuitEvent event) {
-        userManager.unload(event.getPlayer().getUniqueId());
     }
 }
