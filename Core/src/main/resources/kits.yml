@@ -1,0 +1,200 @@
+# ==========================================================
+#  Core — наборы предметов (киты)
+#  Все тексты — MiniMessage (https://docs.advntr.dev/minimessage/format.html).
+#  Буквальный символ «<» в тексте пишется как «\<».
+#  Изменения применяются командой /core reload.
+# ==========================================================
+
+settings:
+  # Что делать, если предметы набора не помещаются в инвентарь:
+  #   drop — выдать набор, а то, что не поместилось, выбросить под ноги игроку
+  #   deny — не выдавать набор (и не списывать АР), пока игрок не освободит место
+  full-inventory: drop
+  # Закрывать меню наборов после успешного получения набора.
+  # false — меню остаётся открытым и обновляет статусы.
+  close-on-claim: true
+  # Перезарядка (в секундах) для наборов, созданных командой /kit create без указания перезарядки.
+  # 0 — без перезарядки, -1 — одноразовый набор.
+  create-cooldown-seconds: 86400
+  # Через сколько тиков после первого входа выдаются наборы с first-join: true (20 тиков = 1 секунда).
+  first-join-delay-ticks: 20
+
+# ----------------------------------------------------------
+#  Меню /kit
+# ----------------------------------------------------------
+gui:
+  title: '<dark_gray>Выбор набора'
+  # Количество строк меню (1-6). Слоты наборов (slot) должны помещаться в меню: 0 .. rows*9-1.
+  rows: 3
+  # Заполнитель пустых слотов.
+  filler:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+  # Название иконки по умолчанию (если у набора не задан icon.name).
+  icon-name: '<white>Набор <kit>'
+  # Подстановки для <price> и <cooldown> в строках ниже.
+  price-free: '<green>бесплатно'
+  price-paid: '<aqua><amount> АР'
+  cooldown-none: '<green>нет'
+  cooldown-one-time: '<yellow>одноразовый'
+  # Строки, добавляемые к описанию набора (icon.lore).
+  # Подстановки: <kit> — название набора, <price> — стоимость, <cooldown> — перезарядка.
+  info:
+    - ''
+    - ' <gray>Стоимость: <price>'
+    - ' <gray>Перезарядка: <white><cooldown>'
+  # Строки статуса — зависят от того, может ли игрок получить набор сейчас.
+  # Дополнительная подстановка: <time> — сколько осталось до конца перезарядки.
+  status:
+    available:
+      - ''
+      - ' <gray>Статус: <green>доступен'
+    cooldown:
+      - ''
+      - ' <gray>Статус: <red>недоступен'
+      - ' <gray>Будет доступен через: <yellow><time>'
+    claimed:
+      - ''
+      - ' <gray>Статус: <red>уже получен'
+      - ' <gray>Этот набор можно получить только один раз'
+    no-permission:
+      - ''
+      - ' <gray>Статус: <red>нет доступа'
+  # Подсказка по кнопкам мыши — в конце описания.
+  actions:
+    - ''
+    - '<green><bold>ЛКМ</bold> <gray>— получить набор'
+    - '<yellow><bold>ПКМ</bold> <gray>— посмотреть содержимое'
+
+# ----------------------------------------------------------
+#  Просмотр содержимого набора (ПКМ по набору в меню)
+#  Предметы занимают все строки, кроме последней; в последней — кнопки.
+# ----------------------------------------------------------
+content-gui:
+  # Подстановка: <kit> — название набора.
+  title: '<dark_gray>Содержимое: <kit>'
+  # Количество строк (2-6).
+  rows: 6
+  filler:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+  # Слоты кнопок должны быть в последней строке (для 6 строк: 45-53).
+  # Подстановки: <page> — текущая страница, <pages> — всего страниц.
+  back:
+    slot: 49
+    material: BARRIER
+    name: '<red>Назад'
+    lore:
+      - '<gray>Вернуться к выбору набора'
+  previous-page:
+    slot: 45
+    material: ARROW
+    name: '<gray>Предыдущая страница'
+    lore:
+      - '<gray>Страница <gold><page></gold> из <gold><pages>'
+  next-page:
+    slot: 53
+    material: ARROW
+    name: '<gray>Следующая страница'
+    lore:
+      - '<gray>Страница <gold><page></gold> из <gold><pages>'
+
+# ----------------------------------------------------------
+#  Наборы
+#  Ключ — id набора: латинские буквы, цифры, «_» и «-», до 32 символов
+#  (create, delete и give заняты подкомандами). Право на получение: core.kit.<id>.
+#
+#  display-name      — название набора в сообщениях и меню (MiniMessage)
+#  slot              — слот иконки в меню /kit (если не указан — первый свободный)
+#  icon              — иконка: material, name (необязательно), lore (описание), glint (свечение)
+#  cooldown-seconds  — перезарядка в секундах: 0 — без перезарядки, -1 — одноразовый
+#  price             — стоимость в АР (0 — бесплатно); списывается через Vault при получении
+#  auto-equip        — надевать броню из набора в пустые слоты брони
+#  first-join        — автоматически выдать новичку при первом входе на сервер
+#                      (без проверки права и цены; перезарядка набора при этом начинается)
+#  items             — предметы. Два формата, можно смешивать:
+#    1) читаемый:
+#       - material: DIAMOND_SWORD     # обязательно
+#         amount: 1                   # количество (больше размера стака — делится на несколько стаков)
+#         name: '<aqua>Меч'           # название (MiniMessage)
+#         lore: ['<gray>Описание']    # описание
+#         enchantments:               # зачарования: ключ из реестра Minecraft (sharpness, minecraft:unbreaking...)
+#           sharpness: 5
+#         unbreakable: true           # неразрушимый
+#    2) base64 — точная копия предмета со всеми компонентами (так сохраняет /kit create):
+#       - 'base64:...'
+#
+#  Создать набор из своего инвентаря: /kit create <id> [перезарядка в секундах]
+# ----------------------------------------------------------
+kits:
+  start:
+    display-name: '<green>Стартовый'
+    slot: 11
+    icon:
+      material: LEATHER_CHESTPLATE
+      lore:
+        - '<gray>Всё необходимое для первых шагов'
+    cooldown-seconds: -1
+    price: 0
+    auto-equip: true
+    first-join: true
+    items:
+      - material: STONE_SWORD
+      - material: STONE_PICKAXE
+      - material: STONE_AXE
+      - material: STONE_SHOVEL
+      - material: BREAD
+        amount: 16
+      - material: TORCH
+        amount: 32
+      - material: LEATHER_HELMET
+      - material: LEATHER_CHESTPLATE
+      - material: LEATHER_LEGGINGS
+      - material: LEATHER_BOOTS
+
+  food:
+    display-name: '<gold>Еда'
+    slot: 13
+    icon:
+      material: COOKED_BEEF
+      lore:
+        - '<gray>Немного еды, чтобы не голодать'
+    cooldown-seconds: 3600
+    price: 0
+    auto-equip: false
+    first-join: false
+    items:
+      - material: COOKED_BEEF
+        amount: 16
+      - material: BAKED_POTATO
+        amount: 16
+      - material: GOLDEN_CARROT
+        amount: 8
+
+  warrior:
+    display-name: '<red>Воин'
+    slot: 15
+    icon:
+      material: IRON_SWORD
+      glint: true
+      lore:
+        - '<gray>Железная броня и зачарованный меч'
+    cooldown-seconds: 86400
+    price: 500
+    auto-equip: true
+    first-join: false
+    items:
+      - material: IRON_SWORD
+        name: '<red>Меч воина'
+        enchantments:
+          sharpness: 2
+          unbreaking: 2
+      - material: SHIELD
+      - material: IRON_HELMET
+      - material: IRON_CHESTPLATE
+        enchantments:
+          protection: 1
+      - material: IRON_LEGGINGS
+      - material: IRON_BOOTS
+      - material: GOLDEN_APPLE
+        amount: 2
