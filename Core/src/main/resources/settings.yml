@@ -39,11 +39,50 @@ database:
     elideSetAutoCommits: 'true'
     maintainTimeStats: 'false'
 
+# Команды Core, которые не нужно регистрировать (основные названия без "/").
+# Например [gc] — чтобы команду /gc мог занять плагин Guilds. Требует перезапуска.
+disabled-commands: []
+
 users:
   # Как часто сохранять изменённые данные онлайн-игроков (в минутах)
   autosave-interval-minutes: 5
   # Максимальное время загрузки данных игрока при входе (в секундах). При превышении вход отклоняется.
   load-timeout-seconds: 10
+
+# Общие настройки телепортации (/spawn, /warp, /tpa, /back, /rtp, база гильдии)
+teleport:
+  # Задержка перед телепортацией в секундах (0 — мгновенно). Право core.teleport.bypass-warmup её пропускает.
+  warmup-seconds: 4
+  cancel-on-move: true
+  cancel-on-damage: true
+  # Неуязвимость после телепортации (в тиках, 20 тиков = 1 секунда)
+  invulnerability-ticks: 70
+  bossbar:
+    enabled: true
+    title: '<green>Телепортация через <white><seconds></white> сек. Не двигайтесь!</green>'
+    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+    color: GREEN
+    # PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+    overlay: PROGRESS
+  sound:
+    key: 'minecraft:entity.enderman.teleport'
+    volume: 1.0
+    pitch: 1.0
+
+# Режим боя (AntiRelog)
+combat:
+  enabled: true
+  # Сколько секунд длится режим боя после удара по игроку
+  duration-seconds: 15
+  # Убить игрока, вышедшего с сервера в режиме боя
+  punish-on-quit: true
+  # Выключать полёт и элитры в режиме боя
+  disable-flight: true
+  disable-elytra: true
+  # Показывать оставшееся время в action bar
+  actionbar: true
+  # Команды, разрешённые в режиме боя (без "/")
+  allowed-commands: [msg, m, tell, w, r, reply, gc]
 
 homes:
   # Количество точек дома по умолчанию

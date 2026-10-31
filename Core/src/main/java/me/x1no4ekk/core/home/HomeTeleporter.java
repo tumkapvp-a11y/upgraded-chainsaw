@@ -1,7 +1,11 @@
 package me.x1no4ekk.core.home;
 
+import me.x1no4ekk.core.api.TeleportResult;
+import me.x1no4ekk.core.combat.CombatManager;
 import me.x1no4ekk.core.config.Messages;
 import me.x1no4ekk.core.horn.TeleportHorn;
+import me.x1no4ekk.core.teleport.TeleportOptions;
+import me.x1no4ekk.core.teleport.TeleportService;
 import me.x1no4ekk.core.user.User;
 import me.x1no4ekk.core.user.UserManager;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -21,15 +25,17 @@ public final class HomeTeleporter {
     public static final String BYPASS_COOLDOWN_PERMISSION = "core.horn.bypass-cooldown";
 
     private final UserManager userManager;
-    private final HomeManager homeManager;
+    private final TeleportService teleportService;
+    private final CombatManager combatManager;
     private final TeleportHorn horn;
     private final Messages messages;
     private final Executor mainThread;
 
-    public HomeTeleporter(UserManager userManager, HomeManager homeManager, TeleportHorn horn,
-                          Messages messages, Executor mainThread) {
+    public HomeTeleporter(UserManager userManager, TeleportService teleportService, CombatManager combatManager,
+                          TeleportHorn horn, Messages messages, Executor mainThread) {
         this.userManager = userManager;
-        this.homeManager = homeManager;
+        this.teleportService = teleportService;
+        this.combatManager = combatManager;
         this.horn = horn;
         this.messages = messages;
         this.mainThread = mainThread;
@@ -65,22 +71,25 @@ public final class HomeTeleporter {
             messages.send(player, "home.world-not-loaded", Placeholder.unparsed("world", home.world()));
             return;
         }
+        if (combatManager.isInCombat(player.getUniqueId()) && !player.hasPermission(CombatManager.BYPASS_PERMISSION)) {
+            messages.send(player, "teleport.in-combat",
+                    Placeholder.unparsed("seconds", String.valueOf(combatManager.getRemainingSeconds(player.getUniqueId()))));
+            return;
+        }
 
         horn.playSound(player);
         UUID uuid = player.getUniqueId();
-        homeManager.teleport(player, home).thenAcceptAsync(success -> {
+        teleportService.teleport(player, home.toLocation(), TeleportOptions.HORN).thenAcceptAsync(result -> {
             Player online = Bukkit.getPlayer(uuid);
             if (online == null) {
                 return;
             }
-            if (Boolean.TRUE.equals(success)) {
+            if (result == TeleportResult.SUCCESS) {
                 messages.send(online, "home.teleported", Placeholder.unparsed("home", home.name()));
                 int cooldown = horn.cooldownTicks();
                 if (cooldown > 0 && !online.hasPermission(BYPASS_COOLDOWN_PERMISSION)) {
                     online.setCooldown(Material.GOAT_HORN, cooldown);
                 }
-            } else {
-                messages.send(online, "home.teleport-failed", Placeholder.unparsed("home", home.name()));
             }
         }, mainThread);
     }
@@ -91,17 +100,12 @@ public final class HomeTeleporter {
             return;
         }
         UUID uuid = player.getUniqueId();
-        homeManager.teleport(player, home).thenAcceptAsync(success -> {
+        teleportService.teleport(player, home.toLocation(), TeleportOptions.ADMIN).thenAcceptAsync(result -> {
             Player online = Bukkit.getPlayer(uuid);
-            if (online == null) {
-                return;
-            }
-            if (Boolean.TRUE.equals(success)) {
+            if (online != null && result == TeleportResult.SUCCESS) {
                 messages.send(online, "home.player-teleported",
                         Placeholder.unparsed("home", home.name()),
                         Placeholder.unparsed("player", ownerName));
-            } else {
-                messages.send(online, "home.teleport-failed", Placeholder.unparsed("home", home.name()));
             }
         }, mainThread);
     }
