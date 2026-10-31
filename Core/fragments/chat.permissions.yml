@@ -1,0 +1,87 @@
+  core.chat.admin:
+    description: 'Управление чатом: /chat clear, /chat mute, /chat unmute'
+    default: op
+  core.chat.bypass-clear:
+    description: 'Не терять историю чата при /chat clear'
+    default: op
+  core.chat.bypass-mute:
+    description: 'Писать в чат, когда он отключён через /chat mute'
+    default: op
+  core.chat.bypass-cooldown:
+    description: 'Писать в чат и каналы без паузы между сообщениями и без задержки после входа'
+    default: op
+  core.chattoggle:
+    description: 'Включение и выключение чата командой /chattoggle'
+    default: true
+  core.chat.donate:
+    description: 'Писать и читать донат-чат (/donatechat, /dc)'
+    default: op
+  core.chat.staff:
+    description: 'Писать и читать чат персонала (/staffchat, /sc)'
+    default: op
+  core.chat.group.admin:
+    description: 'Привилегия чата admin (chat.yml groups)'
+    default: false
+  core.chat.group.moderator:
+    description: 'Привилегия чата moderator (chat.yml groups)'
+    default: false
+  core.chat.group.helper:
+    description: 'Привилегия чата helper (chat.yml groups)'
+    default: false
+  core.chat.group.legend:
+    description: 'Привилегия чата legend (chat.yml groups)'
+    default: false
+  core.chat.group.vip:
+    description: 'Привилегия чата vip (chat.yml groups)'
+    default: false
+  core.msg:
+    description: 'Личные сообщения: /msg, /m, /reply, /r'
+    default: true
+  core.msg.bypass-toggle:
+    description: 'Писать игрокам, отключившим личные сообщения'
+    default: op
+  core.msg.bypass-cooldown:
+    description: 'Личные сообщения без паузы'
+    default: op
+  core.msgtoggle:
+    description: 'Включение и выключение личных сообщений командой /msgtoggle'
+    default: true
+  core.socialspy:
+    description: 'Слежка за всеми личными сообщениями (/socialspy)'
+    default: op
+  core.targetspy:
+    description: 'Слежка за сообщениями и командами игрока (/targetspy)'
+    default: op
+  core.ignore:
+    description: 'Игнор-лист (/ignore)'
+    default: true
+  core.ignore.exempt:
+    description: 'Игрока с этим правом нельзя добавить в игнор'
+    default: op
+  core.broadcast:
+    description: 'Объявления персонала (/broadcast, /bc) с MiniMessage'
+    default: op
+  core.broadcast.ad:
+    description: 'Реклама на весь сервер (/adbroadcast)'
+    default: true
+  core.broadcast.buy:
+    description: 'Объявление о покупке (/buybroadcast)'
+    default: true
+  core.broadcast.sell:
+    description: 'Объявление о продаже (/sellbroadcast)'
+    default: true
+  core.broadcast.stream:
+    description: 'Анонс трансляции со ссылкой (/streambroadcast)'
+    default: op
+  core.broadcast.video:
+    description: 'Анонс видео со ссылкой (/videobroadcast)'
+    default: op
+  core.broadcast.format:
+    description: 'Цвета и оформление (MiniMessage) в объявлениях игроков'
+    default: op
+  core.broadcast.bypass-cooldown:
+    description: 'Объявления без перезарядки'
+    default: op
+  core.broadcast.free:
+    description: 'Объявления без оплаты'
+    default: op
