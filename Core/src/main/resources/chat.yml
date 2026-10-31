@@ -1,0 +1,286 @@
+# ==========================================================
+#  Core — чат, личные сообщения и объявления
+#  Все тексты — MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#  Символ "<" как обычный текст пишется так: \<
+#  Перезагрузка: /core reload (при ошибке остаются прежние настройки)
+# ==========================================================
+
+# ---------------------------------------------------------------- основной чат
+chat-mode:
+  # Локальный чат: сообщение видят только игроки в радиусе (в том же мире).
+  # false — весь чат глобальный, символ ниже не нужен и не удаляется.
+  local-enabled: true
+  # Сообщение, начинающееся с этого символа, уходит в глобальный чат (символ удаляется)
+  global-symbol: '!'
+  # Радиус локального чата в блоках
+  local-radius: 200
+  # Предупреждать игрока, если его локальное сообщение никто не услышал
+  notify-nobody-heard: true
+
+# Ограничения основного чата. Право core.chat.bypass-cooldown снимает оба ограничения.
+limits:
+  # Пауза между сообщениями (секунды, 0 — без паузы)
+  cooldown-seconds: 4
+  # Сколько секунд после входа на сервер нельзя писать в чат (0 — сразу)
+  join-delay-seconds: 10
+
+# Форматы основного чата.
+# Теги:
+#   <prefix>, <suffix>  — префикс и суффикс привилегии (см. groups) или из Vault
+#   <name>              — ник игрока (цвет привилегии, подсказка и клик из player-name)
+#   <guild>             — тег гильдии (пусто, если гильдии нет), оформление в guild.format
+#   <message>           — сообщение (цвет и форматирование привилегии)
+#   <world>             — мир игрока
+#   <papi:плейсхолдер>  — PlaceholderAPI, например <papi:player_level>
+formats:
+  global: '<dark_gray>[<gold>G</gold>]</dark_gray> <guild><prefix><name><suffix><dark_gray>:</dark_gray> <message>'
+  local: '<dark_gray>[<yellow>L</yellow>]</dark_gray> <guild><prefix><name><suffix><dark_gray>:</dark_gray> <message>'
+
+# Ник игрока (<name>) в чате
+player-name:
+  # Подсказка при наведении (пустой список — без подсказки).
+  # Теги: <name> — ник, <display-name> — отображаемое имя, <world> — мир, <papi:...>
+  hover:
+    - '<gray>Игрок <gold><name></gold>'
+    - '<gray>Мир: <white><world></white>'
+    - ''
+    - '<dark_gray>Нажмите, чтобы написать в личные сообщения'
+  click:
+    # suggest — вставить команду в строку чата, run — выполнить сразу, none — без действия
+    action: suggest
+    # <name> заменяется ником игрока
+    command: '/msg <name> '
+
+# Тег гильдии (<guild>) от плагина гильдий. <tag> — тег гильдии.
+guild:
+  format: '<dark_gray>[</dark_gray><tag><dark_gray>]</dark_gray> '
+
+# Брать префикс и суффикс из Vault (LuckPerms и т.п.), если игрок не подошёл ни под одну привилегию ниже.
+# Цвета в префиксе Vault можно задавать кодами &a / &#ff8800.
+vault-fallback: true
+
+# Привилегии чата. Проверяются сверху вниз — применяется первая подходящая.
+# Привилегия подходит, если у игрока есть право permission (по умолчанию core.chat.group.<название>;
+# пустая строка — проверка права отключена) или его основная группа Vault указана в vault-groups.
+#   prefix / suffix   — MiniMessage, поддерживаются <papi:...>
+#   name-color        — открывающие теги для ника: <red>, <#ff8800>, <gradient:#ff0000:#ffaa00>, <bold> ...
+#   message-color     — открывающие теги для текста сообщения (так же, как name-color)
+#   allow-formatting  — разрешить игроку оформлять сообщения тегами <red>, <#ff8800>, <bold>, <gradient:...>, <rainbow>
+#                       (клики, подсказки и прочие теги игрокам недоступны никогда)
+groups:
+  admin:
+    permission: 'core.chat.group.admin'
+    vault-groups: [admin, owner]
+    prefix: '<dark_gray>[<gradient:#ff4b2b:#ff416c><bold>Админ</bold></gradient>]</dark_gray> '
+    suffix: ''
+    name-color: '<#ff4b2b>'
+    message-color: '<white>'
+    allow-formatting: true
+  moderator:
+    permission: 'core.chat.group.moderator'
+    vault-groups: [moderator, moder]
+    prefix: '<dark_gray>[<#3fa9f5>Модератор</#3fa9f5>]</dark_gray> '
+    suffix: ''
+    name-color: '<#3fa9f5>'
+    message-color: '<white>'
+    allow-formatting: true
+  helper:
+    permission: 'core.chat.group.helper'
+    vault-groups: [helper]
+    prefix: '<dark_gray>[<green>Хелпер</green>]</dark_gray> '
+    suffix: ''
+    name-color: '<green>'
+    message-color: '<#e0e0e0>'
+    allow-formatting: false
+  legend:
+    permission: 'core.chat.group.legend'
+    vault-groups: [legend]
+    prefix: '<dark_gray>[<gradient:#f7971e:#ffd200>Легенда</gradient>]</dark_gray> '
+    suffix: ''
+    name-color: '<gradient:#f7971e:#ffd200>'
+    message-color: '<#fff3c4>'
+    allow-formatting: true
+  vip:
+    permission: 'core.chat.group.vip'
+    vault-groups: [vip]
+    prefix: '<dark_gray>[<#a8e063>VIP</#a8e063>]</dark_gray> '
+    suffix: ''
+    name-color: '<#a8e063>'
+    message-color: '<white>'
+    allow-formatting: false
+
+# Оформление игроков без привилегии (префикс/суффикс заменяются данными Vault, если vault-fallback: true)
+default-group:
+  prefix: ''
+  suffix: ''
+  name-color: '<gray>'
+  message-color: '<#d0d0d0>'
+  allow-formatting: false
+
+# /chat clear — сколько пустых строк отправить игрокам без права core.chat.bypass-clear
+chat-clear:
+  lines: 100
+
+# ---------------------------------------------------------------- каналы
+# Донат-чат (/donatechat, /dc): видят игроки с правом core.chat.donate.
+# Чат персонала (/staffchat, /sc): видят игроки с правом core.chat.staff.
+# Теги те же, что и в formats: <prefix>, <suffix>, <name>, <guild>, <message>, <world>, <papi:...>
+# cooldown-seconds — пауза между сообщениями (право core.chat.bypass-cooldown её снимает)
+donate-chat:
+  format: '<gold>Донат-чат</gold> <dark_gray>|</dark_gray> <prefix><name><gray>:</gray> <message>'
+  cooldown-seconds: 30
+staff-chat:
+  format: '<red>Персонал</red> <dark_gray>|</dark_gray> <prefix><name><gray>:</gray> <message>'
+  cooldown-seconds: 3
+
+# ---------------------------------------------------------------- личные сообщения
+private-messages:
+  # Пауза между личными сообщениями (право core.msg.bypass-cooldown её снимает)
+  cooldown-seconds: 10
+  # Теги: <sender> — отправитель, <receiver> — получатель, <message> — текст
+  format-sender: '<dark_gray>[<gold>ЛС</gold>]</dark_gray> <gray>Вы</gray> <yellow>→</yellow> <gold><receiver></gold><dark_gray>:</dark_gray> <white><message>'
+  format-receiver: '<dark_gray>[<gold>ЛС</gold>]</dark_gray> <gold><sender></gold> <yellow>→</yellow> <gray>Вам</gray><dark_gray>:</dark_gray> <white><message>'
+  # Копия сообщения для /socialspy и /targetspy
+  format-spy: '<dark_gray>[<red>Слежка</red>]</dark_gray> <gray><sender></gray> <yellow>→</yellow> <gray><receiver></gray><dark_gray>:</dark_gray> <white><message>'
+  # Команды игрока, за которым следят через /targetspy. Теги: <player>, <command>
+  format-command-spy: '<dark_gray>[<red>Команда</red>]</dark_gray> <gray><player></gray><dark_gray>:</dark_gray> <white><command>'
+  # Звук получателю (пустой key — без звука)
+  sound:
+    key: 'minecraft:entity.experience_orb.pickup'
+    volume: 0.6
+    pitch: 1.4
+
+# ---------------------------------------------------------------- объявления
+# broadcast — /broadcast (/bc), ad — /adbroadcast, buy — /buybroadcast, sell — /sellbroadcast,
+# stream — /streambroadcast <ссылка> [текст], video — /videobroadcast <ссылка> [текст]
+# Параметры:
+#   permission         — право на команду (пусто — доступна всем). Изменение полностью вступает в силу после перезапуска.
+#   format             — строка или список строк. Теги: <name> — автор, <message> — текст, <link> — ссылка (stream/video)
+#   cooldown-seconds   — перезарядка, сохраняется между перезаходами (право core.broadcast.bypass-cooldown её снимает)
+#   price              — цена в АР, списывается перед отправкой (0 — бесплатно; право core.broadcast.free)
+#   parse-minimessage  — разбирать текст как MiniMessage (только для объявлений персонала).
+#                        В остальных объявлениях цвета доступны лишь с правом core.broadcast.format
+#   respect-ignore     — не показывать объявление тем, кто игнорирует автора
+#   sound              — звук всем получателям (пустой key — без звука)
+#   link-mode          — (stream/video) url — показывать саму ссылку, label — показывать link-label (ссылка в подсказке)
+broadcasts:
+  broadcast:
+    permission: 'core.broadcast'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Объявление от <gold><name></gold>: <white><message>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 120
+    price: 0
+    parse-minimessage: true
+    respect-ignore: false
+    sound:
+      key: 'minecraft:block.note_block.bell'
+      volume: 0.8
+      pitch: 1.0
+  ad:
+    permission: 'core.broadcast.ad'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Игрок <gold><name></gold> рекламирует: <yellow><message>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 120
+    price: 0
+    parse-minimessage: false
+    respect-ignore: true
+    sound:
+      key: 'minecraft:block.note_block.pling'
+      volume: 0.6
+      pitch: 1.2
+  buy:
+    permission: 'core.broadcast.buy'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Игрок <gold><name></gold> покупает: <green><message>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 120
+    price: 0
+    parse-minimessage: false
+    respect-ignore: true
+    sound:
+      key: 'minecraft:block.note_block.pling'
+      volume: 0.6
+      pitch: 1.2
+  sell:
+    permission: 'core.broadcast.sell'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Игрок <gold><name></gold> продаёт: <aqua><message>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 120
+    price: 0
+    parse-minimessage: false
+    respect-ignore: true
+    sound:
+      key: 'minecraft:block.note_block.pling'
+      volume: 0.6
+      pitch: 1.2
+  stream:
+    permission: 'core.broadcast.stream'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Игрок <gold><name></gold> начал трансляцию! <white><message>'
+      - '<gold>┃ <link>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 1800
+    price: 0
+    parse-minimessage: false
+    respect-ignore: true
+    sound:
+      key: 'minecraft:entity.player.levelup'
+      volume: 0.6
+      pitch: 1.0
+    link-mode: label
+    link-label: '<aqua><u>[Смотреть трансляцию]</u></aqua>'
+  video:
+    permission: 'core.broadcast.video'
+    format:
+      - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+      - '<gold>┃ <gray>Игрок <gold><name></gold> выпустил видео! <white><message>'
+      - '<gold>┃ <link>'
+      - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    cooldown-seconds: 1800
+    price: 0
+    parse-minimessage: false
+    respect-ignore: true
+    sound:
+      key: 'minecraft:entity.player.levelup'
+      volume: 0.6
+      pitch: 1.0
+    link-mode: label
+    link-label: '<aqua><u>[Смотреть видео]</u></aqua>'
+
+# ---------------------------------------------------------------- автообъявления
+auto-broadcast:
+  enabled: true
+  # Интервал между объявлениями в секундах
+  interval-seconds: 300
+  # random — в случайном порядке (без повтора подряд), sequential — по очереди
+  order: random
+  # Звук при объявлении (пустой key — без звука)
+  sound:
+    key: 'minecraft:block.note_block.chime'
+    volume: 0.5
+    pitch: 1.0
+  # Объявления: название → список строк MiniMessage. <papi:...> подставляется для каждого игрока отдельно.
+  messages:
+    discord:
+      - ''
+      - ' <gradient:#5865f2:#8ea1e1><bold>Discord</bold></gradient> <gray>— новости, ивенты и поддержка:'
+      - ' <click:open_url:''https://discord.gg/example''><aqua><u>discord.gg/example</u></aqua></click>'
+      - ''
+    ignore:
+      - ''
+      - ' <gold>Совет:</gold> <gray>мешает игрок? Используйте <yellow>/ignore \<ник></yellow>'
+      - ' <gray>Отключить чат полностью — <yellow>/chattoggle</yellow>'
+      - ''
+    global:
+      - ''
+      - ' <gold>Совет:</gold> <gray>начните сообщение с <yellow>!</yellow>, чтобы написать всему серверу,'
+      - ' <gray>иначе вас услышат только игроки поблизости.'
+      - ''
