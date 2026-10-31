@@ -53,6 +53,8 @@ public final class User {
     private final Map<String, Home> homes = new ConcurrentHashMap<>();
     private final Set<UUID> ignored = ConcurrentHashMap.newKeySet();
     private final Map<String, Long> kitCooldowns = new ConcurrentHashMap<>();
+    /** Persistent cooldowns (core_cooldowns): key -> expiry epoch millis. Managed by CooldownService. */
+    private final Map<String, Long> cooldowns = new ConcurrentHashMap<>();
 
     private volatile boolean dirty;
 
@@ -301,6 +303,25 @@ public final class User {
         kitCooldowns.put(kit.toLowerCase(Locale.ROOT), timestamp);
     }
 
+    /**
+     * @return expiry (epoch millis) of a persistent cooldown, or 0
+     */
+    public long getCooldownExpiry(String key) {
+        Long expiry = cooldowns.get(key);
+        if (expiry == null) {
+            return 0;
+        }
+        if (expiry <= System.currentTimeMillis()) {
+            cooldowns.remove(key, expiry);
+            return 0;
+        }
+        return expiry;
+    }
+
+    void putCooldown(String key, long expiresAt) {
+        cooldowns.put(key, expiresAt);
+    }
+
     // ---------------------------------------------------------------- persistence helpers
 
     public boolean isDirty() {
@@ -327,7 +348,8 @@ public final class User {
     /**
      * Applies values loaded from the database. Only called before the user is published to the cache.
      */
-    void load(UserSnapshot data, Collection<Home> loadedHomes, Collection<UUID> loadedIgnores, Map<String, Long> loadedKits) {
+    void load(UserSnapshot data, Collection<Home> loadedHomes, Collection<UUID> loadedIgnores,
+              Map<String, Long> loadedKits, Map<String, Long> loadedCooldowns) {
         this.nickname = data.nickname();
         this.fly = data.fly();
         this.god = data.god();
@@ -346,5 +368,6 @@ public final class User {
         }
         ignored.addAll(loadedIgnores);
         loadedKits.forEach((kit, time) -> kitCooldowns.put(kit.toLowerCase(Locale.ROOT), time));
+        cooldowns.putAll(loadedCooldowns);
     }
 }

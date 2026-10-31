@@ -1,10 +1,12 @@
 package me.x1no4ekk.core.util;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
@@ -59,6 +61,19 @@ public final class ItemBuilder {
         if (glint) {
             item.editMeta(meta -> meta.setEnchantmentGlintOverride(true));
         }
+        return this;
+    }
+
+    public ItemBuilder amount(int amount) {
+        item.setAmount(Math.clamp(amount, 1, item.getMaxStackSize()));
+        return this;
+    }
+
+    /**
+     * Sets the head owner (PLAYER_HEAD only). Online players' profiles already contain skin textures.
+     */
+    public ItemBuilder head(PlayerProfile profile) {
+        item.editMeta(SkullMeta.class, meta -> meta.setPlayerProfile(profile));
         return this;
     }
 

@@ -11,27 +11,7 @@ softdepend:
   - PlaceholderAPI
   - Economy
 
-commands:
-  core:
-    description: 'Администрирование плагина Core'
-    usage: '/core <reload|horn> [игрок] [количество]'
-    permission: core.admin
-  sethome:
-    description: 'Создать точку дома'
-    usage: '/sethome <название>'
-    permission: core.sethome
-  delhome:
-    description: 'Удалить точку дома'
-    usage: '/delhome <название>'
-    permission: core.delhome
-  playerhome:
-    description: 'Посмотреть точки дома игрока'
-    usage: '/playerhome <игрок> [дом]'
-    permission: core.playerhome
-  home:
-    description: 'Подсказка: телепортация домой работает только через Рог телепортации'
-    usage: '/home'
-    aliases: [homes]
+# Команды регистрируются через Brigadier API Paper (LifecycleEvents.COMMANDS), поэтому их нет в этом файле.
 
 permissions:
   core.admin:
@@ -57,4 +37,19 @@ permissions:
     default: op
   core.homes.unlimited:
     description: 'Без ограничения количества точек дома'
+    default: op
+  core.teleport.bypass-warmup:
+    description: 'Телепортация без задержки'
+    default: op
+  core.back.death:
+    description: 'Возврат командой /back на место смерти'
+    default: true
+  core.combat.bypass:
+    description: 'Не входить в режим боя'
+    default: false
+  core.vanish:
+    description: 'Режим невидимости'
+    default: op
+  core.vanish.see:
+    description: 'Видеть игроков в невидимости'
     default: op
