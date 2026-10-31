@@ -1,0 +1,59 @@
+# ==========================================================
+#  Core — сообщения (MiniMessage)
+#  <prefix> подставляется во всех сообщениях автоматически.
+# ==========================================================
+
+prefix: '<gradient:#ffb347:#ffcc33><bold>Core</bold></gradient> <dark_gray>|</dark_gray> '
+
+general:
+  no-permission: '<prefix><red>У вас нет прав на это действие.'
+  players-only: '<prefix><red>Эта команда доступна только игрокам.'
+  player-not-found: '<prefix><gray>Игрок <gold><player></gold> не найден.'
+  data-not-loaded: '<prefix><red>Ваши данные ещё загружаются, попробуйте через секунду.'
+  database-error: '<prefix><red>Ошибка базы данных. Попробуйте позже.'
+  load-failed-kick: '<red>Не удалось загрузить ваши данные.<newline><gray>Попробуйте зайти ещё раз через минуту.'
+  reloaded: '<prefix><green>Конфигурация перезагружена.'
+  invalid-number: '<prefix><red><value></red> <gray>— не число.'
+
+core:
+  usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Перезагрузить конфиг: <red>/core reload'
+    - '<gold>┃ <gray>Выдать Рог телепортации: <red>/core horn [игрок] [количество]'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  horn-given: '<prefix><gray>Игроку <gold><player></gold> выдан Рог телепортации <gold>x<amount></gold>.'
+  horn-received: '<prefix><gray>Вы получили <gold>Рог телепортации</gold>.'
+
+home:
+  disabled: '<prefix><gray>Команда отключена. Телепортироваться домой можно только с помощью <gold>Рога телепортации</gold> <gray>(ПКМ).'
+  empty: '<prefix><gray>У вас нет точек дома.'
+  not-found: '<prefix><gray>Дом <gold><home></gold> не найден.'
+  teleported: '<prefix><gray>Вы телепортировались к дому <gold><home></gold>.'
+  teleport-failed: '<prefix><red>Не удалось телепортироваться к дому <gold><home></gold>.'
+  world-not-loaded: '<prefix><red>Мир <gold><world></gold> недоступен.'
+  sethome-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Создать точку дома: <red>/sethome \<название>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  delhome-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Удалить точку дома: <red>/delhome \<название>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  playerhome-usage:
+    - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+    - '<gold>┃ <gray>Меню точек дома игрока: <red>/playerhome \<игрок>'
+    - '<gold>┃ <gray>Телепорт к точке дома игрока: <red>/playerhome \<игрок> \<дом>'
+    - '<gold>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  invalid-name: '<prefix><red>Недопустимое название точки дома.'
+  limit: '<prefix><gray>Максимальное количество ваших точек дома: <gold><limit></gold>.'
+  already-exists: '<prefix><gray>У вас уже есть точка дома <gold><home></gold>.'
+  created: '<prefix><gray>Вы создали точку дома <gold><home></gold>. Используйте <gold>Рог телепортации</gold>, чтобы вернуться.'
+  deleted: '<prefix><gray>Вы удалили точку дома <gold><home></gold>.'
+  disabled-world: '<prefix><red>В этом мире нельзя создавать точки дома.'
+  spectator: '<prefix><red>Нельзя создать точку дома в режиме наблюдателя.'
+  player-empty: '<prefix><gray>У игрока <gold><player></gold> нет точек дома.'
+  player-teleported: '<prefix><gray>Вы телепортировались к точке дома <gold><home></gold> игрока <gold><player></gold>.'
+
+horn:
+  no-permission: '<prefix><red>Вы не можете использовать Рог телепортации.'
+  cooldown: '<prefix><gray>Рог перезаряжается ещё <gold><seconds></gold> сек.'
