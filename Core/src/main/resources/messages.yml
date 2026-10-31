@@ -15,6 +15,8 @@ general:
   reloaded: '<prefix><green>Конфигурация перезагружена.'
   reload-failed: '<prefix><red>Ошибка в конфигурации, оставлены прежние настройки: <gray><error>'
   invalid-number: '<prefix><red><value></red> <gray>— не число.'
+  number-range: '<prefix><gray>Число должно быть от <gold><min></gold> до <gold><max></gold>.'
+  command-error: '<prefix><red>Во время выполнения команды произошла ошибка. Подробности в консоли.'
 
 core:
   usage:
@@ -29,7 +31,6 @@ home:
   disabled: '<prefix><gray>Команда отключена. Телепортироваться домой можно только с помощью <gold>Рога телепортации</gold> <gray>(ПКМ).'
   not-found: '<prefix><gray>Дом <gold><home></gold> не найден.'
   teleported: '<prefix><gray>Вы телепортировались к дому <gold><home></gold>.'
-  teleport-failed: '<prefix><red>Не удалось телепортироваться к дому <gold><home></gold>.'
   world-not-loaded: '<prefix><red>Мир <gold><world></gold> недоступен.'
   sethome-usage:
     - '<gold>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -57,3 +58,20 @@ home:
 horn:
   no-permission: '<prefix><red>Вы не можете использовать Рог телепортации.'
   cooldown: '<prefix><gray>Рог перезаряжается ещё <gold><seconds></gold> сек.'
+
+teleport:
+  warmup: '<prefix><gray>Телепортация через <gold><seconds></gold> сек. Не двигайтесь!'
+  cancelled-move: '<prefix><red>Телепортация отменена: вы сдвинулись с места.'
+  cancelled-damage: '<prefix><red>Телепортация отменена: вы получили урон.'
+  in-combat: '<prefix><red>Нельзя телепортироваться в режиме боя! Осталось <gold><seconds></gold> сек.'
+  failed: '<prefix><red>Не удалось выполнить телепортацию.'
+
+combat:
+  tagged: '<prefix><red>Вы вошли в режим боя на <gold><seconds></gold> сек. Не выходите с сервера!'
+  ended: '<prefix><green>Вы вышли из режима боя.'
+  actionbar: '<red>⚔ Режим боя: <white><seconds></white> сек.'
+  command-blocked: '<prefix><red>Эта команда недоступна в режиме боя. Осталось <gold><seconds></gold> сек.'
+  quit-broadcast: '<prefix><red><player></red> <gray>вышел с сервера во время боя и был наказан.'
+
+vanish:
+  still-vanished: '<prefix><gray>Вы всё ещё в режиме невидимости.'

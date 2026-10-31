@@ -6,14 +6,10 @@ import me.x1no4ekk.core.home.Home;
 import me.x1no4ekk.core.user.User;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,26 +20,20 @@ import java.util.logging.Level;
  * /playerhome &lt;player&gt; [home] — opens another player's homes or teleports to one of them.
  * Works for offline players by reading MySQL asynchronously.
  */
-public final class PlayerHomeCommand implements TabExecutor {
+public final class PlayerHomeCommand extends BaseCommand {
 
     private record Target(UUID uuid, String name, List<Home> homes) {
     }
 
-    private final CorePlugin plugin;
-
     public PlayerHomeCommand(CorePlugin plugin) {
-        this.plugin = plugin;
+        super(plugin, "playerhome", "core.playerhome", "Точки дома другого игрока");
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
-            plugin.messages().send(sender, "general.players-only");
-            return true;
-        }
+    protected void execute(CommandSender sender, String[] args) {
+        Player player = requirePlayer(sender);
         if (args.length < 1 || args.length > 2) {
-            plugin.messages().send(player, "home.playerhome-usage");
-            return true;
+            throw fail("home.playerhome-usage");
         }
         String targetName = args[0];
         String homeName = args.length == 2 ? args[1] : null;
@@ -65,7 +55,6 @@ public final class PlayerHomeCommand implements TabExecutor {
             }
             handle(viewer, target.get(), homeName);
         }, plugin.mainThread());
-        return true;
     }
 
     private void handle(Player viewer, Target target, String homeName) {
@@ -110,25 +99,17 @@ public final class PlayerHomeCommand implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    protected List<String> complete(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            String prefix = args[0].toLowerCase(Locale.ROOT);
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(name -> name.toLowerCase(Locale.ROOT).startsWith(prefix))
-                    .toList();
+            return playerNames(sender, args[0]);
         }
         if (args.length == 2) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            Player target = findPlayer(sender, args[0]);
             User user = target == null ? null : plugin.userManager().getUser(target);
             if (user == null) {
                 return List.of();
             }
-            String prefix = args[1].toLowerCase(Locale.ROOT);
-            return user.getHomesSorted().stream()
-                    .map(Home::name)
-                    .filter(name -> name.toLowerCase(Locale.ROOT).startsWith(prefix))
-                    .toList();
+            return filter(user.getHomesSorted().stream().map(Home::name).toList(), args[1]);
         }
         return List.of();
     }
