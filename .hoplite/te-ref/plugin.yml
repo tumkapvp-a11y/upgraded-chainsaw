@@ -1,0 +1,28 @@
+name: TrustEssentials
+version: 1.0
+main: ru.bestrax.essentials.EssentialsPlugin
+
+author: BestraX
+description: vk.com/bestrax
+
+depend:
+  - Vault
+
+softdepend:
+  - 'AntiRelog'
+  - 'Clans'
+  - 'AkyloffClans'
+  - 'MultiWorld'
+  - 'BukkitAPI'
+  - 'Multiverse-Core'
+  - 'PlayerPoints'
+  - 'WorldEdit'
+  - 'WorldGuard'
+  - 'Economy'
+  - 'iConomy'
+  - 'TrustItems'
+  - 'TNE'
+  - 'SunCheck'
+  - 'Clans'
+
+api-version: 1.13
