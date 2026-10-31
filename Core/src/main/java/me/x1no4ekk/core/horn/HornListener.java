@@ -5,6 +5,7 @@ import me.x1no4ekk.core.gui.HomeGui;
 import me.x1no4ekk.core.user.User;
 import org.bukkit.Keyed;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -52,7 +53,7 @@ public final class HornListener implements Listener {
         }
         // Keep vanilla block interaction (doors, chests...) unless the player is sneaking.
         Block block = event.getClickedBlock();
-        if (action == Action.RIGHT_CLICK_BLOCK && block != null && block.getType().isInteractable() && !player.isSneaking()) {
+        if (action == Action.RIGHT_CLICK_BLOCK && block != null && isInteractable(block) && !player.isSneaking()) {
             return;
         }
         event.setUseInteractedBlock(Event.Result.DENY);
@@ -74,6 +75,11 @@ public final class HornListener implements Listener {
             return;
         }
         HomeGui.own(plugin, user).open(player);
+    }
+
+    private static boolean isInteractable(Block block) {
+        BlockType type = block.getType().asBlockType();
+        return type != null && type.isInteractable();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
