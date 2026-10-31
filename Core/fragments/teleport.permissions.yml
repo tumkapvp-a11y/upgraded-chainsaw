@@ -1,0 +1,54 @@
+  core.tp:
+    description: 'Телепортация к игроку (/tp)'
+    default: op
+  core.tp.others:
+    description: 'Телепортация одного игрока к другому (/tp <игрок> <цель>)'
+    default: op
+  core.tphere:
+    description: 'Телепортация игрока к себе (/tphere)'
+    default: op
+  core.tppos:
+    description: 'Телепортация по координатам (/tppos, /tp <x> <y> <z>)'
+    default: op
+  core.tpall:
+    description: 'Телепортация всех игроков к себе (/tpall)'
+    default: op
+  core.tpa:
+    description: 'Запросы на телепортацию (/tpa, /tpaccept, /tpdeny, /tpcancel)'
+    default: true
+  core.tptoggle:
+    description: 'Включение и отключение входящих запросов на телепортацию (/tptoggle)'
+    default: true
+  core.tptoggle.bypass:
+    description: 'Отправка запросов игрокам, отключившим телепортации'
+    default: op
+  core.back:
+    description: 'Возврат на предыдущую локацию (/back)'
+    default: true
+  core.top:
+    description: 'Подъём на самый верхний блок (/top)'
+    default: op
+  core.setspawn:
+    description: 'Установка точки спавна (/setspawn)'
+    default: op
+  core.spawn:
+    description: 'Телепортация на спавн (/spawn)'
+    default: true
+  core.spawn.others:
+    description: 'Телепортация другого игрока на спавн (/spawn <игрок>)'
+    default: op
+  core.rtp:
+    description: 'Случайная телепортация (/rtp)'
+    default: true
+  core.rtp.default:
+    description: 'Вариант случайной телепортации «default»'
+    default: true
+  core.rtp.near:
+    description: 'Вариант случайной телепортации «near» (рядом с игроками)'
+    default: true
+  core.rtp.far:
+    description: 'Вариант случайной телепортации «far» (дальняя)'
+    default: op
+  core.rtp.bypass-cooldown:
+    description: 'Случайная телепортация без перезарядки'
+    default: op
